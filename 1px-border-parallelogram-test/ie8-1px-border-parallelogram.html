@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="text text-left">图片</div>
+<div class="triangle-right"></div>
+<div class="triangle-left"></div>
+<div class="text text-right">视频</div>
+<br><br>
+<div class="text text-active text-left">图片</div>
+<div class="triangle-right triangle-active"></div>
+<div class="triangle-left triangle-active"></div>
+<div class="text text-active text-right">视频</div>
+<style>
+    body {
+        background-color: #000000;
+    }
+    .text {
+        float: left;
+        font-size: 14px;
+        padding: 0 1em;
+        letter-spacing: 1px;
+        color: #f08200;
+        height: 23px;
+        background-color: #ffffff;
+        border: 1px solid #f08200;
+        line-height: 23px;
+    }
+    .text-active {
+        color: #ffffff;
+        background-color: #f08200;
+    }
+    .text-left {
+        border-right: none;
+        padding-right: 0.75em;
+    }
+    .text-right {
+        border-left: none;
+        padding-left: 0.75em;
+    }
+    .triangle-right {
+        float: left;
+        position: relative;
+        width: 1px;
+        height: 0;
+        color: #f08200;
+        border-right: 10px solid transparent;
+        border-bottom: 25px solid ;
+    }
+    /*边框为x则top为2.7x 长直角边为原+3.7x*/
+    .triangle-right:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 0;
+        top: 1px;
+        left: -1px;
+        color: #ffffff;
+        border-right: 9px solid transparent;
+        border-bottom: 23px solid;
+    }
+
+    .triangle-left {
+        float: left;
+        position: relative;
+        width: 1px;
+        height: 0;
+        color: #f08200;
+        border-left: 10px solid transparent;
+        border-top: 25px solid;
+    }
+    /*边框为x则top为2.7x 长直角边为原+3.7x*/
+    .triangle-left:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 0;
+        top: -24px;
+        left: -8px;
+        color: #ffffff;
+        border-left: 9px solid transparent;
+        border-top: 23px solid;
+    }
+
+    .triangle-active:after {
+        color: #f08200;
+    }
+</style>
+</body>
+</html>
