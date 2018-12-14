@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body class="overflowHide">
 <div class="fixed-div">
     <button type="button" onclick="addDiv()">新增随机div</button>
 </div>
@@ -44,6 +44,19 @@
         margin: 0;
         height: 100%;
         width: 100%;
+    }
+
+    .overflowHide {
+        overflow: scroll;
+        /*隐藏滚动条，当IE下溢出，仍然可以滚动*/
+        -ms-overflow-style: none;
+        /*火狐下隐藏滚动条*/
+        overflow: -moz-scrollbars-none;
+    }
+
+    /*chrome下隐藏滚动条*/
+    .overflowHide::-webkit-scrollbar {
+        display: none;
     }
 
     .vertica-mode {
