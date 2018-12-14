@@ -31,8 +31,44 @@
         line-height: 90px;
     }
 
-    .my-navbar .navbar-nav > li {
-        color: red;
+    .my-navbar .navbar-nav {
+        padding: 10px 10px 10px 0;
+    }
+
+    .my-navbar .navbar-nav li > a {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    .my-navbar .navbar-nav li:first-child:before {
+        content: none;
+    }
+
+    .my-navbar .navbar-nav li:before {
+        content: "";
+        position: absolute;
+        top: 35%;
+        left: -1px;
+        bottom: 35%;
+        display: inline-block;
+        width: 2px;
+        background-color: #707070;
+    }
+
+    .my-navbar .navbar-nav li:hover:after {
+        content: "";
+        position: absolute;
+        right: 20%;
+        bottom: 10px;
+        left: 20%;
+        display: inline-block;
+        height: 2px;
+        background-color: #f08200;
+    }
+
+    .my-navbar .navbar-toggle {
+        margin-top: 28px;
+        margin-bottom: 28px;
     }
 </style>
 <body>
@@ -48,14 +84,19 @@
         <a class="navbar-brand" href="#">
             <img class="img-responsive" alt="Brand" src="img/car-logo.png">
         </a>
-        <span class="navbar-name h4">无锡车影汽车服务连锁</span>
+        <span class="navbar-name h4 visible-lg-inline">无锡车影汽车服务连锁</span>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right text-center text-uppercase">
             <li><a href="#">首页<br>Home</a></li>
-            <li><a href="#">首页<br>Home</a></li>
+            <li><a href="#">公司介绍<br>Company Profile</a></li>
+            <li><a href="#">项目介绍<br>Project introduction</a></li>
+            <li><a href="#">项目案例<br>Project case</a></li>
+            <li><a href="#">会员中心<br>Member center</a></li>
+            <li><a href="#">新闻中心<br>News center</a></li>
+            <li><a href="#">联系我们<br>Contact us</a></li>
         </ul>
     </div><!-- /.navbar-collapse -->
 </nav>
