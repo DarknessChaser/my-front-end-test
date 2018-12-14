@@ -9,6 +9,11 @@
 
 [点击查看](content-fixed-height-vertical-split.html)
 
+## horizontally-centered-vertically.html
+用`writing-mode`方式实现水平垂直居中,支持多行内容。
+
+[点击查看](horizontally-centered-vertically.html)
+
 ## normal-vertical-split.html
 - 普通垂直平分高度，IE中布局用td需要手动指定100%宽度，否则不自动占满滚动条宽度。
 
