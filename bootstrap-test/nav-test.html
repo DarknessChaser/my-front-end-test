@@ -27,8 +27,8 @@
     }
 
     .my-navbar .navbar-name {
-        height: 90px;
-        line-height: 90px;
+        height: 70px;
+        line-height: 70px;
     }
 
     .my-navbar .navbar-nav {
@@ -41,7 +41,13 @@
     }
 
     .my-navbar .navbar-nav li:first-child:before {
-        content: none;
+        display: none;
+    }
+
+    @media (max-width: 767px) {
+        .my-navbar .navbar-nav li:before {
+            display: none !important;
+        }
     }
 
     .my-navbar .navbar-nav li:before {
@@ -84,7 +90,7 @@
         <a class="navbar-brand" href="#">
             <img class="img-responsive" alt="Brand" src="img/car-logo.png">
         </a>
-        <span class="navbar-name h4 visible-lg-inline">无锡车影汽车服务连锁</span>
+        <span class="navbar-name h4 pull-left visible-lg-block">无锡车影汽车服务连锁</span>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
