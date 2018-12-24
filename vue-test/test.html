@@ -9,14 +9,17 @@
 </head>
 <body>
 <div id="app">
-    <h1>{{message}}</h1>
+    <h1>{{message}}:{{me2}}</h1>
+    <button type="button" @click="change">点我</button>
+    <button type="button" @click="change2">点我2</button>
 </div>
 </body>
 <script>
     var vm = new Vue({
         el: '#app',
         data: {
-            message: 'Vue的生命周期'
+            message: 'Vue的生命周期',
+            me2: 'me2'
         },
         beforeCreate: function() {
             console.group('------beforeCreate创建前状态------');
@@ -80,13 +83,19 @@
             },
             test1: ()=>{
                 console.log(this)
+            },
+            change () {
+                this.message += '1';
+                this.me2 +='1';
+            },
+            change2 () {
+                this.message += '1';
+                this.change3();
+            },
+            change3:function () {
+                this.me2 +='1';
             }
         }
     })
-    const methods = vm.$options.methods
-    for (const key in methods) {
-        vm[key] =  Function.prototype.bind(methods[key], vm)
-        console.log(key)
-    }
 </script>
 </html>
