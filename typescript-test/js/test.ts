@@ -24,11 +24,25 @@ function createName(name: NameOrNameArray) {
     }
 }
 
-var greetingMessage = `Greetings, ${createName(["Sam", "Smith"])}`;
-alert(greetingMessage);
+let greetingMessage = `Greetings, ${createName(["Sam", "Smith"])}`;
+//alert(greetingMessage);
 
 ((m, n) => {
     let a = new Array(m + 1).join(',' + n)
     let b = a.split(',');
     return b.slice(1);
 })(10, 'abc')
+
+let TemplateEngine = function (tpl, data) {
+    let re = /<%([^%>]+)?%>/;
+    let match;
+    while (match = re.exec(tpl)) {
+        tpl = tpl.replace(match[0], data[match[1]])
+    }
+    return tpl;
+}
+let template = '<p><%age%>岁，是<%job%></p>';
+console.log(TemplateEngine(template, {
+    age: 24,
+    job: "学生"
+}));

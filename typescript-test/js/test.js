@@ -20,9 +20,22 @@ function createName(name) {
     }
 }
 var greetingMessage = "Greetings, " + createName(["Sam", "Smith"]);
-alert(greetingMessage);
+//alert(greetingMessage);
 (function (m, n) {
     var a = new Array(m + 1).join(',' + n);
     var b = a.split(',');
     return b.slice(1);
 })(10, 'abc');
+var TemplateEngine = function (tpl, data) {
+    var re = /<%([^%>]+)?%>/;
+    var match;
+    while (match = re.exec(tpl)) {
+        tpl = tpl.replace(match[0], data[match[1]]);
+    }
+    return tpl;
+};
+var template = '<p><%age%>岁，是<%job%></p>';
+console.log(TemplateEngine(template, {
+    age: 24,
+    job: "学生"
+}));
