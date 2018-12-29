@@ -5,6 +5,26 @@
     <title>Typescript测试</title>
 </head>
 <body>
+<input type="text" id="input" onchange="change(this)">
+<span id="output"></span>
 <script src="js/test.js"></script>
+<script>
+    var obj = {}
+    Object.defineProperty(obj,'a',{
+        get: function(){
+            console.log('get val'+a);
+            return a;
+        },
+        set: function(newVal){
+            console.log('set val:' + newVal);
+            a = newVal;
+            document.querySelector('#output').textContent = newVal;
+        }
+    })
+
+    function change(_this) {
+        obj.a = _this.value;
+    }
+</script>
 </body>
 </html>
