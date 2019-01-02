@@ -46,3 +46,18 @@ console.log(TemplateEngine(template, {
     age: 24,
     job: "学生"
 }));
+
+class fujianren {
+    constructor(public name: string, public age: number) {
+
+    }
+
+    say() {
+        console.log(`大家好我叫${this.name}，今年${this.age}岁了`)
+    }
+}
+
+class fujiannanren extends fujianren {
+    constructor(public sex:string){
+    }
+}
