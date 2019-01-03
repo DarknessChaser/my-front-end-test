@@ -5,17 +5,27 @@
     <title>Typescript测试</title>
 </head>
 <body>
+<button onclick="changeColor()">点我变色</button>
 <input type="text" id="input" onchange="change(this)">
 <span id="output"></span>
+<style id="my-style">
+    :root {
+        --global-color: #0f0f0f;
+    }
+
+    #output {
+        color: var(--global-color);
+    }
+</style>
 <script src="js/test.js"></script>
 <script>
     var obj = {}
-    Object.defineProperty(obj,'a',{
-        get: function(){
-            console.log('get val'+a);
+    Object.defineProperty(obj, 'a', {
+        get: function () {
+            console.log('get val' + a);
             return a;
         },
-        set: function(newVal){
+        set: function (newVal) {
             console.log('set val:' + newVal);
             a = newVal;
             document.querySelector('#output').textContent = newVal;
@@ -24,6 +34,27 @@
 
     function change(_this) {
         obj.a = _this.value;
+    }
+
+    function randomRGBColor() {	//随机生成rgb颜色
+        this.r = Math.floor(Math.random() * 255);
+        this.g = Math.floor(Math.random() * 255);
+        this.b = Math.floor(Math.random() * 255);
+        this.color = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+        return this.color = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+    }
+
+    var time;
+
+    function changeColor() {
+        if (time) {
+            window.clearInterval(time)
+            time = undefined
+        } else {
+            time = setInterval(function () {
+                document.querySelector('#my-style').sheet.cssRules[0].style.cssText = '--global-color: ' + randomRGBColor() + ';'
+            }, '100')
+        }
     }
 </script>
 </body>
