@@ -58,6 +58,14 @@ class fujianren {
 }
 
 class fujiannanren extends fujianren {
-    constructor(public sex:string){
+    constructor(public name: string, public age: number,public sex: string) {
+        super(name, age);
+    }
+
+    say() {
+        console.log(`大家好我叫${this.name}，${this.sex},今年${this.age}岁了`)
     }
 }
+
+let ergou = new fujiannanren('二狗',24,'男');
+ergou.say();

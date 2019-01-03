@@ -64,10 +64,17 @@ var fujianren = /** @class */ (function () {
 }());
 var fujiannanren = /** @class */ (function (_super) {
     __extends(fujiannanren, _super);
-    function fujiannanren(sex) {
-        var _this = this;
+    function fujiannanren(name, age, sex) {
+        var _this = _super.call(this, name, age) || this;
+        _this.name = name;
+        _this.age = age;
         _this.sex = sex;
         return _this;
     }
+    fujiannanren.prototype.say = function () {
+        console.log("\u5927\u5BB6\u597D\u6211\u53EB" + this.name + "\uFF0C" + this.sex + ",\u4ECA\u5E74" + this.age + "\u5C81\u4E86");
+    };
     return fujiannanren;
 }(fujianren));
+var ergou = new fujiannanren('二狗', 24, '男');
+ergou.say();
