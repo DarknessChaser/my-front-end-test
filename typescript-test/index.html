@@ -4,19 +4,37 @@
     <meta charset="UTF-8">
     <title>Typescript测试</title>
 </head>
-<body>
-<button onclick="changeColor()">点我变色</button>
-<input type="text" id="input" onchange="change(this)">
-<span id="output"></span>
 <style id="my-style">
     :root {
         --global-color: #0f0f0f;
     }
 
-    #output {
+    .output {
         color: var(--global-color);
     }
 </style>
+<body>
+<button onclick="changeColor()">点我变色</button>
+<input type="text" id="input" onchange="change(this)">
+<span id="output" class="output"></span>
+<hr>
+<input type="text" id="input2" onchange="change2(this)">
+<span id="output2" class="output"></span>
+
+<script>
+    var Scope = function () {
+        this.$$watchers = [];
+    };
+
+    Scope.prototype.$watch = function () {
+
+    };
+
+    Scope.prototype.$digest = function () {
+
+    };
+
+</script>
 <script src="js/test.js"></script>
 <script>
     var obj = {}
