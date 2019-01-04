@@ -11,29 +11,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var _this = this;
-var testfunction = function (text) {
-    console.log('箭头测试', _this, text);
-};
-var testfunction2 = function (text) {
-    console.log('箭头测试', this, text);
-};
-testfunction('hello');
-testfunction2('hello');
-function add(a, b) {
-    return Number(a) + Number(b);
-}
-console.log(add('123', 546));
-function createName(name) {
-    if (typeof name === "string") {
-        return name;
-    }
-    else {
-        return name.join(" ");
-    }
-}
-var greetingMessage = "Greetings, " + createName(["Sam", "Smith"]);
-//alert(greetingMessage);
 (function (m, n) {
     var a = new Array(m + 1).join(',' + n);
     var b = a.split(',');
@@ -65,16 +42,16 @@ var fujianren = /** @class */ (function () {
 var fujiannanren = /** @class */ (function (_super) {
     __extends(fujiannanren, _super);
     function fujiannanren(name, age, sex) {
+        if (sex === void 0) { sex = '男'; }
         var _this = _super.call(this, name, age) || this;
-        _this.name = name;
-        _this.age = age;
         _this.sex = sex;
         return _this;
     }
-    fujiannanren.prototype.say = function () {
-        console.log("\u5927\u5BB6\u597D\u6211\u53EB" + this.name + "\uFF0C" + this.sex + ",\u4ECA\u5E74" + this.age + "\u5C81\u4E86");
+    fujiannanren.prototype.maifang = function () {
+        console.log("\u5927\u5BB6\u597D\uFF0C\u6211\u662F" + this.name + "\uFF01\u56E0\u4E3A\u6211\u662F" + this.sex + "\u4EBA\uFF0C\u6240\u4EE5\u6211\u8981\u4E70\u623F\u3002\u623F\u5B50\u597D\u8D35\u554A\uFF0C\u545C\u545C\u545C");
     };
     return fujiannanren;
 }(fujianren));
-var ergou = new fujiannanren('二狗', 24, '男');
+var ergou = new fujiannanren('二狗', 24);
 ergou.say();
+ergou.maifang();
