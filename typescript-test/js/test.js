@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    };
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -55,3 +55,7 @@ var fujiannanren = /** @class */ (function (_super) {
 var ergou = new fujiannanren('二狗', 24);
 ergou.say();
 ergou.maifang();
+function say(person) {
+    console.log("my name is " + person.name + ",sex is " + person.sex);
+}
+say(ergou);

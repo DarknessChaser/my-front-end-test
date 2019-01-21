@@ -48,3 +48,11 @@ class fujiannanren extends fujianren {
 let ergou = new fujiannanren('二狗', 24);
 ergou.say();
 ergou.maifang()
+interface renlei {
+    name:string,
+    sex:string
+}
+function say(person:renlei) {
+    console.log(`my name is ${person.name},sex is ${person.sex}`);
+}
+say(ergou);
