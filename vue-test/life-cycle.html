@@ -10,6 +10,7 @@
 <body>
 <div id="app">
     <h1>{{message}}:{{me2}}</h1>
+    <h2 @click="change4">myobj.b.c{{myobj.b.c}}<br>myobj.b.d{{myobj.b.d}}</h2>
     <button type="button" @click="change">点我</button>
     <button type="button" @click="change2">点我2</button>
 </div>
@@ -19,7 +20,14 @@
         el: '#app',
         data: {
             message: 'Vue的生命周期',
-            me2: 'me2'
+            me2: 'me2',
+            myobj:{
+                'a':123,
+                'b':{
+                    'c':333,
+                    'd':444
+                }
+            }
         },
         beforeCreate: function() {
             console.group('------beforeCreate创建前状态------');
@@ -94,6 +102,9 @@
             },
             change3:function () {
                 this.me2 +='1';
+            },
+            change4 () {
+                delete this.myobj.b.d
             }
         }
     })
