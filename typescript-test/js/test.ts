@@ -4,6 +4,11 @@
     return b.slice(1);
 })(10, 'abc')
 
+// for (let i = 0; i < 10; i++) {
+//     setInterval(function () {
+//         console.log(i)
+//     },100)
+// }
 let TemplateEngine = function (tpl, data) {
     let re = /<%([^%>]+)?%>/;
     let match;
@@ -56,3 +61,28 @@ function say(person:renlei) {
     console.log(`my name is ${person.name},sex is ${person.sex}`);
 }
 say(ergou);
+
+let a = new Promise((resolve, reject) => {
+    let b = Math.random()*10
+    console.log('a生成的随机数是'+b)
+    if(b>5){
+        resolve(b)
+    } else {
+        reject(b)
+    }
+})
+
+let c = new Promise((resolve, reject) => {
+    let d = Math.random()*10
+    console.log('c生成的随机数是'+d)
+    if(d>5){
+        resolve(a)
+    } else {
+        reject(a)
+    }
+})
+a.then((num)=>{
+    console.log('这是一个大于5的数'+num)
+},num=>{
+    console.log('这是一个小于5的数'+num)
+})
