@@ -16,3 +16,8 @@
 可以手动指定百分比的环形进度条
 
 [点击查看](circle3.html)
+
+## circle4.html
+可以根据js指定百分比的环形进度条
+
+[点击查看](circle4.html)
