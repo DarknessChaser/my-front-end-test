@@ -5,6 +5,9 @@
     <title>圆圈动画</title>
 </head>
 <style>
+    :root {
+        --global-color: #3195d0;
+    }
     .pie {
         width: 200px;
         height: 200px;
@@ -12,7 +15,7 @@
         background: #ddd;
         margin: 0 auto;
         position: relative;
-        background-image: linear-gradient(to right, transparent 50%, #3195d0 0);
+        background-image: linear-gradient(to right, transparent 50%, var(--global-color) 0);
     }
 
     .pie::before {
@@ -26,7 +29,7 @@
     }
 
     .left.pie::before {
-        animation: spin-right 1s linear 1 forwards, spin-left 0.98s 1s linear 1 forwards;
+        animation: spin-right 1s linear 1 forwards, spin-left 0.8s 1s linear 1 forwards;
     }
 
     .right.pie::before {
@@ -58,11 +61,11 @@
     @keyframes spin-left {
         from {
             transform: rotate(0);
-            background: #3195d0;
+            background: var(--global-color);
         }
         to {
-            transform: rotate(.49turn);
-            background: #3195d0;
+            transform: rotate(.4turn);
+            background: var(--global-color);
         }
     }
 </style>

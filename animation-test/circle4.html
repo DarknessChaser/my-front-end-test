@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>圆圈动画</title>
+</head>
+<style>
+    :root {
+        --global-color: #3195d0;
+    }
+
+    .pie {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: #ddd;
+        margin: 0 auto;
+        position: relative;
+        background-image: linear-gradient(to right, transparent 50%, var(--global-color) 0);
+    }
+
+    .circle {
+        margin-left: 50%;
+        width: 50%;
+        height: 100%;
+        border-radius: 0 100% 100% 0 / 50%;
+        transform-origin: left;
+    }
+
+    /*.left .circle {*/
+    /*    animation: spin-right 1s linear 1 forwards, spin-left 0.8s 1s linear 1 forwards;*/
+    /*}*/
+
+    /*.left .circle {*/
+    /*    transition: transform 1s linear;*/
+    /*}*/
+
+    /*.right .circle {*/
+    /*    animation: spin-right 1s linear 1 forwards;*/
+    /*}*/
+
+    .circle-right {
+        background-color: inherit;
+        transition: transform 1s linear;
+    }
+
+    .circle-left {
+        position: absolute;
+        top: 0;
+        background-color: var(--global-color);
+        visibility: hidden;
+        transition: transform 1s linear 1s, visibility 0s 1s;
+    }
+
+    .pie-mini {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80%;
+        width: 80%;
+        line-height: 80%;
+        position: absolute;
+        z-index: 1;
+        top: 10%;
+        left: 10%;
+        background-color: #fff;
+        border-radius: 50%;
+    }
+</style>
+<body>
+<div class="pie">
+    <div class="circle circle-right"></div>
+    <div class="circle circle-left"></div>
+    <div class="pie-mini"><span class="pie-mini-text"></span></div>
+</div>
+<label for="percentage">
+    输入百分比：
+    <input type="number" id="percentage">
+</label>
+<button id="click">点我转圈</button>
+</body>
+<script>
+    var right = document.querySelector('.circle-right')
+    var left = document.querySelector('.circle-left')
+    var text = document.querySelector('.pie-mini-text')
+    var click = document.querySelector('#click')
+    click.onclick = function () {
+        var percentage = document.querySelector('#percentage').value
+        text.innerHTML = percentage + '%';
+        if (percentage <= 50) {
+            right.setAttribute('style', `transform: rotate(.${percentage}turn);`)
+        } else {
+            right.setAttribute('style', 'transform: rotate(.5turn);')
+            left.setAttribute('style', `transform: rotate(.${percentage - 50}turn);visibility: visible;`)
+        }
+    }
+</script>
+</html>
