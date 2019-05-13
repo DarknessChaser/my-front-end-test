@@ -88,10 +88,11 @@
         var percentage = document.querySelector('#percentage').value
         text.innerHTML = percentage + '%';
         if (percentage <= 50) {
-            right.setAttribute('style', `transform: rotate(.${percentage}turn);`)
+            right.setAttribute('style', `transform: rotate(${percentage / 100}turn);`)
+            left.setAttribute('style', `transform: rotate(0turn);visibility: hidden;`)
         } else {
             right.setAttribute('style', 'transform: rotate(.5turn);')
-            left.setAttribute('style', `transform: rotate(.${percentage - 50}turn);visibility: visible;`)
+            left.setAttribute('style', `transform: rotate(${(percentage - 50) / 100}turn);visibility: visible;`)
         }
     }
 </script>
