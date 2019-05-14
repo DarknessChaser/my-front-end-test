@@ -27,21 +27,9 @@
         transform-origin: left;
     }
 
-    /*.left .circle {*/
-    /*    animation: spin-right 1s linear 1 forwards, spin-left 0.8s 1s linear 1 forwards;*/
-    /*}*/
-
-    /*.left .circle {*/
-    /*    transition: transform 1s linear;*/
-    /*}*/
-
-    /*.right .circle {*/
-    /*    animation: spin-right 1s linear 1 forwards;*/
-    /*}*/
-
     .circle-right {
         background-color: inherit;
-        transition: transform 1s linear;
+
     }
 
     .circle-left {
@@ -49,7 +37,7 @@
         top: 0;
         background-color: var(--global-color);
         visibility: hidden;
-        transition: transform 1s linear 1s, visibility 0s 1s;
+
     }
 
     .pie-mini {
@@ -88,11 +76,11 @@
         var percentage = document.querySelector('#percentage').value
         text.innerHTML = percentage + '%';
         if (percentage <= 50) {
-            right.setAttribute('style', `transform: rotate(${percentage / 100}turn);`)
-            left.setAttribute('style', `transform: rotate(0turn);visibility: hidden;`)
+            right.setAttribute('style', `transition: transform 1s linear;transform: rotate(${percentage / 100}turn);`)
+            left.setAttribute('style', `transition: transform 1s linear 1s, visibility 0s 1s;transform: rotate(0turn);visibility: hidden;`)
         } else {
-            right.setAttribute('style', 'transform: rotate(.5turn);')
-            left.setAttribute('style', `transform: rotate(${(percentage - 50) / 100}turn);visibility: visible;`)
+            right.setAttribute('style', `transition: transform 1s linear;transform: rotate(.5turn);`)
+            left.setAttribute('style', `transition: transform 1s linear 1s, visibility 0s 1s;transform: rotate(${(percentage - 50) / 100}turn);visibility: visible;`)
         }
     }
 </script>
