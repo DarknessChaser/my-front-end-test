@@ -72,16 +72,27 @@
     var left = document.querySelector('.circle-left')
     var text = document.querySelector('.pie-mini-text')
     var click = document.querySelector('#click')
+    var time = 1
+    var percentage_old = 0
     click.onclick = function () {
         var percentage = document.querySelector('#percentage').value
         text.innerHTML = percentage + '%';
         if (percentage <= 50) {
-            right.setAttribute('style', `transition: transform 1s linear;transform: rotate(${percentage / 100}turn);`)
-            left.setAttribute('style', `transition: transform 1s linear 1s, visibility 0s 1s;transform: rotate(0turn);visibility: hidden;`)
+            if (percentage_old <= 50) {
+                right.setAttribute('style', `transition: transform ${time * Math.abs(percentage - percentage_old) / 100}s linear;transform: rotate(${percentage / 100}turn);`)
+            } else {
+                right.setAttribute('style', `transition: transform ${time * (50 - percentage) / 100}s linear ${time * (percentage_old - 50) / 100}s;transform: rotate(${percentage / 100}turn);`)
+                left.setAttribute('style', `transition: transform ${time * (percentage_old - 50) / 100}s linear, visibility 0s ${time * (percentage_old - 50) / 100}s;transform: rotate(0turn);visibility: hidden;`)
+            }
         } else {
-            right.setAttribute('style', `transition: transform 1s linear;transform: rotate(.5turn);`)
-            left.setAttribute('style', `transition: transform 1s linear 1s, visibility 0s 1s;transform: rotate(${(percentage - 50) / 100}turn);visibility: visible;`)
+            if (percentage_old <= 50) {
+                right.setAttribute('style', `transition: transform ${time * (50 - percentage_old) / 100}s linear;transform: rotate(.5turn);`)
+                left.setAttribute('style', `transition: transform ${time * (percentage - 50) / 100}s linear ${time * (50 - percentage_old) / 100}s, visibility 0s ${time * (50 - percentage_old) / 100}s;transform: rotate(${(percentage - 50) / 100}turn);visibility: visible;`)
+            } else {
+                left.setAttribute('style', `transition: transform ${time * Math.abs(percentage - percentage_old) / 100}s linear;transform: rotate(${(percentage - 50) / 100}turn);visibility: visible;`)
+            }
         }
+        percentage_old = percentage
     }
 </script>
 </html>
