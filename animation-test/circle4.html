@@ -81,8 +81,8 @@
             if (percentage_old <= 50) {
                 right.setAttribute('style', `transition: transform ${time * Math.abs(percentage - percentage_old) / 100}s linear;transform: rotate(${percentage / 100}turn);`)
             } else {
-                right.setAttribute('style', `transition: transform ${time * (50 - percentage) / 100}s linear ${time * (percentage_old - 50) / 100}s;transform: rotate(${percentage / 100}turn);`)
                 left.setAttribute('style', `transition: transform ${time * (percentage_old - 50) / 100}s linear, visibility 0s ${time * (percentage_old - 50) / 100}s;transform: rotate(0turn);visibility: hidden;`)
+                right.setAttribute('style', `transition: transform ${time * (50 - percentage) / 100}s linear ${time * (percentage_old - 50) / 100}s;transform: rotate(${percentage / 100}turn);`)
             }
         } else {
             if (percentage_old <= 50) {
