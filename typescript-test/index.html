@@ -12,6 +12,14 @@
     .output {
         color: var(--global-color);
     }
+
+    .background-test {
+        width: 400px;
+        padding-top: 400px;
+        /*background-color: #2aabd2;*/
+        background-image: radial-gradient(100px 200px at 200px 200px, rgb(248, 110, 42) 100px, transparent);
+        transform: rotate(.15turn);
+    }
 </style>
 <body>
 <button onclick="changeColor()">点我变色</button>
@@ -21,6 +29,7 @@
 <input type="text" id="input2">
 <span id="output2" class="output"></span>
 
+<div class="background-test"></div>
 <script>
     var Scope = function () {
         this.$$watchers = [];
