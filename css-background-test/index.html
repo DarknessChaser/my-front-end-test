@@ -24,6 +24,7 @@
     }
 
     .background-test2 {
+        position: relative;
         width: 400px;
         height: 400px;
         margin: 0 auto;
@@ -33,7 +34,7 @@
         overflow: hidden;
     }
 
-    .background-test2:after {
+    .background-test2:before {
         margin-top: 13px;
         margin-left: -40px;
         content: '';
@@ -43,6 +44,18 @@
         background: rgba(246, 123, 19, 0.65);
         border-radius: 50%;
         transform: rotate(-.13turn);
+    }
+
+    .background-text {
+        position: absolute;
+        box-sizing: border-box;
+        width: calc(100% - 60px);
+        height: calc(100% - 60px);
+        padding: 10px;
+        top: 0;
+        left: 0;
+        margin: 30px;
+        background-color: #ffffff;
     }
 </style>
 <body>
@@ -55,6 +68,8 @@
 <div class="background-test"></div>
 <hr>
 <p>用伪元素实现椭圆，overflow: hidden隐藏超出的部分。</p>
-<div class="background-test2"></div>
+<div class="background-test2">
+    <div class="background-text">啦啦啦啦啦啦啦</div>
+</div>
 </body>
 </html>
