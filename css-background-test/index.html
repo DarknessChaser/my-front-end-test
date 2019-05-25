@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用css画椭圆</title>
+</head>
+<style>
+    .background-img {
+        width: 400px;
+        margin: 0 auto;
+        vertical-align: bottom;
+    }
+
+    .background-img img {
+        max-width: 100%;
+    }
+
+    .background-test {
+        width: 400px;
+        padding-top: 400px;
+        margin: 0 auto;
+        background-color: #2aabd2;
+        background-image: radial-gradient(100px 200px at 200px 200px, rgb(248, 110, 42) 100px, transparent);
+    }
+
+    .background-test2 {
+        width: 400px;
+        height: 400px;
+        margin: 0 auto;
+        background: rgba(252, 85, 84, 1);
+        box-shadow: 0 11px 29px 0 rgba(220, 16, 14, 0.57);
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .background-test2:after {
+        margin-top: 13px;
+        margin-left: -40px;
+        content: '';
+        display: block;
+        width: 200px;
+        height: 100px;
+        background: rgba(246, 123, 19, 0.65);
+        border-radius: 50%;
+        transform: rotate(-.13turn);
+    }
+</style>
+<body>
+<p>背景效果图</p>
+<div class="background-img">
+    <img src="./images/background-rendering.png" alt="背景效果图">
+</div>
+<hr>
+<p>使用radial-gradient在背景上画椭圆，然而似乎并不能旋转？</p>
+<div class="background-test"></div>
+<hr>
+<p>用伪元素实现椭圆，overflow: hidden隐藏超出的部分。</p>
+<div class="background-test2"></div>
+</body>
+</html>

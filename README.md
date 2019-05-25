@@ -16,6 +16,11 @@
 ## bootstrap-test
 一套开箱即用的兼容性bootstrap3基本模板，内含bs3基本的css和js，修正IE8兼容性用js库，jQuery 1.12，修改HTML默认语言为简体中文。
 
+## css-background-test
+因UI同学没好好给切图引发的一些用CSS实现背景的小操作。
+
+[点击查看](https://darknesschaser.github.io/my-front-end-test/css-background-test/)
+
 ## images-lazyload-test
 懒加载图片的测试dome。
 
