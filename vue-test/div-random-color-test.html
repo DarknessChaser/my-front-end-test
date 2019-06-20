@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>渲染大量随机不重复颜色div测试</title>
+    <style>
+        .color-div {
+            float: left;
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <label>
+        <input type="text" v-model="creatTimes">
+    </label>
+    <button type="button" @click="creatColorList()">使用Vue渲染</button>
+    <button type="button" onclick="creatColorDivList()">使用原生渲染</button>
+    <hr>
+    <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
+         @click="exchangeColor(color)"></div>
+</div>
+<div id="app2"></div>
+<script src="./js/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        // template: '',
+        data: {
+            creatTimes: 0,
+            colorSet: {},
+            colorList: []
+        },
+        methods: {
+            addRandomRGBColor: function () {	//随机生成rgb颜色
+                const r = Math.floor(Math.random() * 255);
+                const g = Math.floor(Math.random() * 255);
+                const b = Math.floor(Math.random() * 255);
+                const randomRGBColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+                if (this.colorSet[randomRGBColor]) {
+                    this.addRandomRGBColor();
+                } else {
+                    this.colorSet[randomRGBColor] = true;
+                    return randomRGBColor;
+                }
+            },
+            creatColorList: function () {
+                this.colorSet = {};
+                console.time('使用Vue渲染');
+                for (let i = 0; i < this.creatTimes; i += 1) {
+                    this.addRandomRGBColor();
+                }
+                this.colorList = Object.keys(this.colorSet);
+                this.$nextTick(() => {
+                        console.timeEnd('使用Vue渲染');
+                    }
+                )
+            },
+            exchangeColor: function (color) {
+                this.colorSet[color] = false;
+                let randomRGBColor = this.addRandomRGBColor();
+                this.$delete(this.colorSet, color);
+                this.$set(this.colorList, this.colorList.indexOf(color), randomRGBColor);
+            }
+        }
+    });
+
+    let colorSet = new Set();
+
+    function getRandomRGBColor() {	//随机生成rgb颜色
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        const randomRGBColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+        if (colorSet.has(randomRGBColor)) {
+            getRandomRGBColor();
+        } else {
+            colorSet.add(randomRGBColor);
+            return randomRGBColor;
+        }
+    }
+
+    function creatColorDivList() {
+        colorSet.clear();
+        let app2 = document.querySelector('#app2');
+        app2.innerHTML = '';
+        console.time('使用原生渲染');
+        for (let i = 0; i < vm.creatTimes; i += 1) {
+            requestAnimationFrame(() => {
+                let div = document.createElement('div');
+                div.innerHTML = `<div class="color-div" style="background-color: ${getRandomRGBColor()}" onclick="exchangeColor(this)"></div>`;
+                app2.append(div);
+                if (i === vm.creatTimes - 1) {
+                    console.timeEnd('使用原生渲染');
+                }
+            }, 0);
+        }
+    }
+
+    function exchangeColor(targetDom) {
+        let randomRGBColor = getRandomRGBColor();
+        targetDom.innerHTML = `<div class="color-div" style="background-color: ${randomRGBColor}" onclick="exchangeColor(this)"></div>`;
+        colorSet.delete(randomRGBColor);
+    }
+</script>
+</body>
+</html>
