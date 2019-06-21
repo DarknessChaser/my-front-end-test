@@ -65,6 +65,25 @@
         background-image: linear-gradient(#000000 65%,#ff0000 65%);
         border: solid #2ea1f8 2px;
     }
+    .border{
+        position: relative;
+        border: 4px solid transparent;
+        border-radius: 16px;
+        background: linear-gradient(orange, violet);
+        background-clip: padding-box;
+        padding: 10px;
+        /* just to show box-shadow still works fine */
+        box-shadow: 0 3px 9px black, inset 0 0 9px white;
+    }
+    .border::after{
+        position: absolute;
+        top: -4px; bottom: -4px;
+        left: -4px; right: -4px;
+        background: linear-gradient(red, blue);
+        content: '';
+        z-index: -1;
+        border-radius: 16px;
+    }
 </style>
 <body>
 <p>背景效果图</p>
@@ -82,5 +101,10 @@
 <hr>
 <p>用渐变背景实现的多背景色</p>
 <div class="background-test3"></div>
+<hr>
+<p>渐变背景+伪元素产生多彩渐变按钮</p>
+<div class="border">
+    112233
+</div>
 </body>
 </html>
