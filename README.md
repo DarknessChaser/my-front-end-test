@@ -21,6 +21,11 @@
 
 [点击查看](https://darknesschaser.github.io/my-front-end-test/css-background-test/)
 
+## css-text-overflow-test
+单行文字超出隐藏后面跟一个不会被隐藏的图标,分别用CSS3和CSS2.1实现。
+
+[点击查看](https://darknesschaser.github.io/my-front-end-test/css-text-overflow-test/index.html)
+
 ## div-random-color-test
 生成若干不重复颜色的div，点击后换成新的不重复颜色。分别用Vue和原生实现。
 

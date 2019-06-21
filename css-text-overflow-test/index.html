@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>单行文字超出隐藏配合图标</title>
+    <style>
+        .text-body {
+            width: 20em;
+        }
+
+        .text-body .text-title {
+            display: inline-block;
+            max-width: calc(100% - 1.5em);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .text-body .text-icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: 2px;
+        }
+
+        .text-body .text-title2 {
+            box-sizing: border-box;
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+            padding-right: 1.5em;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .text-body .text-icon2 {
+            position: absolute;
+            top: 3px;
+            right: 0;
+            width: 1em;
+            height: 1em;
+        }
+    </style>
+</head>
+<body>
+<h3>单行文字超出隐藏配合图标</h3>
+<hr>
+<label>
+    <span>默认单位em</span>
+    <input id="textWidth" type="text">
+</label>
+<button type="button" onclick="setWidth()">点击设置整行文字宽度</button>
+<div class="text-body">
+    <span class="text-title">单行文字超出隐藏配合图标单行文字超出隐藏配合图标单行文字超出隐藏配合图标</span>
+    <img class="text-icon" src="../favicon.ico" alt="文字后小图标">
+</div>
+<div class="text-body">
+    <span class="text-title2">
+        <span>单行文字超出隐藏配合图标单行文字超出隐藏配合图标单行文字超出隐藏配合图标</span>
+        <img class="text-icon2" src="../favicon.ico" alt="文字后小图标">
+    </span>
+</div>
+<script>
+    function setWidth() {
+        var textBodyArr = [].slice.call(document.querySelectorAll('.text-body'));
+        var textBodyWidth = document.querySelector('#textWidth').value + 'em';
+        textBodyArr.forEach(function (textBody) {
+            textBody.style.width = textBodyWidth;
+        })
+    }
+</script>
+</body>
+</html>
