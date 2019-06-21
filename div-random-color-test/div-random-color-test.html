@@ -17,7 +17,7 @@
         <input type="text" v-model="creatTimes">
     </label>
     <button type="button" @click="creatColorList()">使用Vue渲染</button>
-    <button type="button" onclick="creatColorDivList()">使用原生渲染</button>
+    <button type="button" onclick="creatColorDivList()">使用原生分片渲染</button>
     <hr>
     <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
          @click="exchangeColor(color)"></div>
