@@ -21,6 +21,11 @@
 
 [点击查看](https://darknesschaser.github.io/my-front-end-test/css-background-test/)
 
+## div-random-color-test
+生成若干不重复颜色的div，点击后换成新的不重复颜色。分别用Vue和原生实现。
+
+[点击查看](https://darknesschaser.github.io/my-front-end-test/div-random-color-test/div-random-color-test.html)
+
 ## images-lazyload-test
 懒加载图片的测试dome。
 
