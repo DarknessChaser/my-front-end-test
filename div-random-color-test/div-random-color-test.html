@@ -46,6 +46,7 @@
                 }
             },
             creatColorList: function () {
+                document.querySelector('#app2').innerHTML = '';
                 this.colorSet = {};
                 console.time('使用Vue渲染');
                 for (var i = 0; i < this.creatTimes; i += 1) {
@@ -82,19 +83,21 @@
 
     function creatColorDivList() {
         colorSet.clear();
+        vm.colorSet = {};
+        vm.colorList = [];
         var creatTimes = document.getElementById('creatTimes').value;
         var app2 = document.querySelector('#app2');
         app2.innerHTML = '';
         console.time('使用原生分片渲染');
         for (var i = 0; i < creatTimes; i += 1) {
-            setTimeout(() => {
+            setTimeout((i) => {
                 var div = document.createElement('div');
                 div.innerHTML = `<div class="color-div" style="background-color: ${getRandomRGBColor()}" onclick="exchangeColor(this)"></div>`;
                 app2.append(div);
                 if (i === creatTimes - 1) {
                     console.timeEnd('使用原生分片渲染');
                 }
-            }, 0);
+            }, 0, i);
         }
     }
 
