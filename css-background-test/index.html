@@ -62,10 +62,11 @@
         width: 400px;
         height: 400px;
         margin: 0 auto;
-        background-image: linear-gradient(#000000 65%,#ff0000 65%);
+        background-image: linear-gradient(#000000 65%, #ff0000 65%);
         border: solid #2ea1f8 2px;
     }
-    .border{
+
+    .border {
         position: relative;
         border: 4px solid transparent;
         border-radius: 16px;
@@ -75,14 +76,35 @@
         /* just to show box-shadow still works fine */
         box-shadow: 0 3px 9px black, inset 0 0 9px white;
     }
-    .border::after{
+
+    .border::after {
         position: absolute;
-        top: -4px; bottom: -4px;
-        left: -4px; right: -4px;
+        top: -4px;
+        bottom: -4px;
+        left: -4px;
+        right: -4px;
         background: linear-gradient(red, blue);
         content: '';
         z-index: -1;
         border-radius: 16px;
+    }
+
+    .background-test4 {
+        background-color: #2ea1f8;
+        border-radius: 16px;
+        min-height: 225px;
+        line-height: 225px;
+        text-align: center;
+    }
+
+    .is-semicircle {
+        /*使用51%是因为部分设备会出现一道细缝 使用background重置默认的兜底背景色*/
+        background: radial-gradient(circle at right 50%, transparent 20px, #2ea1f8 0) top right / 51% 100% no-repeat,
+        radial-gradient(circle at left 50%, transparent 20px, #2ea1f8 0) bottom left / 51% 100% no-repeat;
+    }
+
+    .is-shadow {
+        filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
     }
 </style>
 <body>
@@ -105,6 +127,11 @@
 <p>渐变背景+伪元素产生多彩渐变按钮</p>
 <div class="border">
     112233
+</div>
+<hr>
+<p>径向渐变背景+阴影滤镜实现挖半圆+阴影效果</p>
+<div class="background-test4 is-semicircle is-shadow">
+    径向渐变背景+阴影滤镜实现挖半圆+阴影效果
 </div>
 </body>
 </html>
