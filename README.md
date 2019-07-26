@@ -36,6 +36,11 @@
 
 [点击查看](https://darknesschaser.github.io/my-front-end-test/images-lazyload-test/lazyload-test.html)
 
+## inline-block-center-middle-test
+利用**inline-block**特性进行的居中自适应弹窗测试
+
+[点击查看](https://darknesschaser.github.io/my-front-end-test/inline-block-center-middle-test/index.html)
+
 ## typescript-test
 自己玩的ts测试。
 
