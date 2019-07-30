@@ -44,7 +44,7 @@
         beforeMount: function () {
         },
         mounted: function () {
-            this.$nextTick(this.watchViewed(0.2));
+            this.$nextTick(this.watchViewed);
         },
         beforeUpdate: function () {
         },
@@ -55,12 +55,12 @@
         destroyed: function () {
         },
         methods: {
-            watchViewed: function (visibleStandard) {
+            watchViewed: function () {
                 var observer = new IntersectionObserver(
                     function (changes) {
                         changes.forEach(function (change) {
                             var container = change.target;
-                            if (change.intersectionRatio > visibleStandard) {
+                            if (change.intersectionRatio > 0) {
                                 vm.viewedTask.push(container.dataset.taskId);
                                 observer.unobserve(container);
                             }
