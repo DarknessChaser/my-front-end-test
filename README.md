@@ -41,6 +41,11 @@
 
 [点击查看](https://darknesschaser.github.io/my-front-end-test/inline-block-center-middle-test/index.html)
 
+## intersectionobserver-test
+利用`IntersectiOnobserver`新API特性进行的监控可见性测试
+
+[点击查看](https://darknesschaser.github.io/my-front-end-test/intersectionobserver-test/intersectionobserver-test.html)
+
 ## typescript-test
 自己玩的ts测试。
 
