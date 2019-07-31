@@ -19,7 +19,7 @@
         <input id="creatTimes" type="text" v-model="creatTimes">
     </label>
     <button type="button" @click="creatColorList()">使用Vue渲染</button>
-    <button type="button" onclick="creatColorDivList()">使用原生分片渲染</button>
+    <button type="button" onclick="creatColorDivList()">使用原生渲染</button>
     <hr>
     <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
          :key="color" @click="exchangeColor(color)"></div>
@@ -90,23 +90,27 @@
         var creatTimes = document.getElementById('creatTimes').value;
         var app2 = document.querySelector('#app2');
         app2.innerHTML = '';
-        console.time('使用原生分片渲染');
+        var fragment = document.createDocumentFragment();
+        console.time('使用原生渲染');
         for (var i = 0; i < creatTimes; i += 1) {
-            setTimeout((i) => {
-                var div = document.createElement('div');
-                div.innerHTML = `<div class="color-div" style="background-color: ${getRandomRGBColor()}" onclick="exchangeColor(this)"></div>`;
-                app2.append(div);
-                if (i === creatTimes - 1) {
-                    console.timeEnd('使用原生分片渲染');
-                }
-            }, 0, i);
+            var div = document.createElement('div');
+            div.className = 'color-div';
+            div.style.backgroundColor = getRandomRGBColor();
+            div.onclick = function () {
+                exchangeColor(this);
+            };
+            fragment.appendChild(div);
+            if (i === creatTimes - 1) {
+                console.timeEnd('使用原生渲染');
+                app2.append(fragment);
+            }
         }
     }
 
     function exchangeColor(targetDom) {
         var randomRGBColor = getRandomRGBColor();
         colorSet.delete(targetDom.style.backgroundColor);
-        targetDom.innerHTML = `<div class="color-div" style="background-color: ${randomRGBColor}" onclick="exchangeColor(this)"></div>`;
+        targetDom.style.backgroundColor = randomRGBColor;
     }
 </script>
 </body>
