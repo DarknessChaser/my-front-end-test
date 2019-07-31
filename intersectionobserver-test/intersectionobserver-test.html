@@ -61,9 +61,9 @@
         updated: function () {
         },
         beforeDestroy: function () {
+            vm.observer.disconnect();
         },
         destroyed: function () {
-            vm.observer.disconnect();
         },
         methods: {
             watchViewed: function () {
