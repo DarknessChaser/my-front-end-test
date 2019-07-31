@@ -35,7 +35,7 @@
         <h2 class="task-title">这里是被浏览过task的列表{{viewedTask}}</h2>
         <label for="taskNum">
             输入生成task的数量
-            <input id="taskNum" v-model.number="taskNum" type="number">
+            <input id="taskNum" v-model.number.lazy="taskNum" type="number">
         </label>
         <div class="task-item" v-for="num in taskNum" :key="num" :data-task-id="num">这里是第{{num}}个task</div>
     </div>
