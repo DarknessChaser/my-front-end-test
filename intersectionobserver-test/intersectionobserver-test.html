@@ -61,7 +61,7 @@
         updated: function () {
         },
         beforeDestroy: function () {
-            vm.observer.disconnect();
+            this.destroyedObserver(vm.observer);
         },
         destroyed: function () {
         },
@@ -85,13 +85,16 @@
                 [...document.querySelectorAll('.task-item')].forEach(function (item) {
                     vm.observer.observe(item);
                 });
+            },
+            destroyedObserver: function (observer) {
+                if (observer) {
+                    observer.disconnect();
+                }
             }
         },
         watch: {
             taskNum: function () {
-                if (vm.observer) {
-                    vm.observer.disconnect();
-                }
+                this.destroyedObserver(vm.observer);
                 this.$nextTick(this.watchViewed);
             }
         }
