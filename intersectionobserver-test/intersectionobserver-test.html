@@ -70,8 +70,8 @@
                 vm.observer = new IntersectionObserver(
                     function (changes) {
                         changes.forEach(function (change) {
-                            var container = change.target;
                             if (change.intersectionRatio > 0) {
+                                var container = change.target;
                                 var taskId = container.dataset.taskId;
                                 if (vm.viewedTask.indexOf(taskId) === -1) {
                                     vm.viewedTask.push(taskId);
