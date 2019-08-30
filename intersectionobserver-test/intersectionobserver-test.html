@@ -61,13 +61,13 @@
         updated: function () {
         },
         beforeDestroy: function () {
-            this.destroyedObserver(vm.observer);
+            this.destroyedObserver(this.observer);
         },
         destroyed: function () {
         },
         methods: {
             watchViewed: function () {
-                vm.observer = new IntersectionObserver(
+                this.observer = new IntersectionObserver(
                     function (changes) {
                         changes.forEach(function (change) {
                             if (change.intersectionRatio > 0) {
@@ -94,7 +94,7 @@
         },
         watch: {
             taskNum: function () {
-                this.destroyedObserver(vm.observer);
+                this.destroyedObserver(this.observer);
                 this.$nextTick(this.watchViewed);
             }
         }
