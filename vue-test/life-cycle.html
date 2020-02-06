@@ -13,98 +13,118 @@
     <h2 @click="change4">myobj.b.c{{myobj.b.c}}<br>myobj.b.d{{myobj.b.d}}</h2>
     <button type="button" @click="change">点我</button>
     <button type="button" @click="change2">点我2</button>
+    <h3>arr1:{{arr1}}</h3>
+    <input type="checkbox" v-model="arr1" :value="b">
+    <button type="button" @click="pushArr">push</button>
 </div>
 </body>
 <script>
+
+    var a = {
+        name: 'a',
+        type: 'typeA',
+    };
+    var b = {
+        name: 'a',
+        type: 'typeA',
+    };
+
     var vm = new Vue({
         el: '#app',
         data: {
             message: 'Vue的生命周期',
             me2: 'me2',
-            myobj:{
-                'a':123,
-                'b':{
-                    'c':333,
-                    'd':444
+            myobj: {
+                'a': 123,
+                'b': {
+                    'c': 333,
+                    'd': 444
                 }
-            }
+            },
+            arr1: [],
+            a: a,
+            b: b,
         },
-        beforeCreate: function() {
+        beforeCreate: function () {
             console.group('------beforeCreate创建前状态------');
-            console.log("%c%s", "color:red" , "el     : " + this.$el); //undefined
-            console.log("%c%s", "color:red","data   : " + this.$data); //undefined
-            console.log("%c%s", "color:red","message: " + this.message)
+            console.log("%c%s", "color:red", "el     : " + this.$el); //undefined
+            console.log("%c%s", "color:red", "data   : " + this.$data); //undefined
+            console.log("%c%s", "color:red", "message: " + this.message)
         },
-        created: function() {
+        created: function () {
             console.group('------created创建完毕状态------');
-            console.log("%c%s", "color:red","el     : " + this.$el); //undefined
-            console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化
-            console.log("%c%s", "color:red","message: " + this.message); //已被初始化
+            console.log("%c%s", "color:red", "el     : " + this.$el); //undefined
+            console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
+            console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
         },
-        beforeMount: function() {
+        beforeMount: function () {
             console.group('------beforeMount挂载前状态------');
-            console.log("%c%s", "color:red","el     : " + (this.$el)); //已被初始化
+            console.log("%c%s", "color:red", "el     : " + (this.$el)); //已被初始化
             console.log(this.$el);
-            console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化
-            console.log("%c%s", "color:red","message: " + this.message); //已被初始化
+            console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
+            console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
         },
-        mounted: function() {
+        mounted: function () {
             console.group('------mounted 挂载结束状态------');
-            console.log("%c%s", "color:red","el     : " + this.$el); //已被初始化
+            console.log("%c%s", "color:red", "el     : " + this.$el); //已被初始化
             console.log(this.$el);
-            console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化
-            console.log("%c%s", "color:red","message: " + this.message); //已被初始化
+            console.log("%c%s", "color:red", "data   : " + this.$data); //已被初始化
+            console.log("%c%s", "color:red", "message: " + this.message); //已被初始化
             this.test()
             this.test1()
         },
         beforeUpdate: function () {
             console.group('beforeUpdate 更新前状态===============》');
-            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log("%c%s", "color:red", "el     : " + this.$el);
             console.log(this.$el);
-            console.log("%c%s", "color:red","data   : " + this.$data);
-            console.log("%c%s", "color:red","message: " + this.message);
+            console.log("%c%s", "color:red", "data   : " + this.$data);
+            console.log("%c%s", "color:red", "message: " + this.message);
         },
         updated: function () {
             console.group('updated 更新完成状态===============》');
-            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log("%c%s", "color:red", "el     : " + this.$el);
             console.log(this.$el);
-            console.log("%c%s", "color:red","data   : " + this.$data);
-            console.log("%c%s", "color:red","message: " + this.message);
+            console.log("%c%s", "color:red", "data   : " + this.$data);
+            console.log("%c%s", "color:red", "message: " + this.message);
         },
         beforeDestroy: function () {
             console.group('beforeDestroy 销毁前状态===============》');
-            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log("%c%s", "color:red", "el     : " + this.$el);
             console.log(this.$el);
-            console.log("%c%s", "color:red","data   : " + this.$data);
-            console.log("%c%s", "color:red","message: " + this.message);
+            console.log("%c%s", "color:red", "data   : " + this.$data);
+            console.log("%c%s", "color:red", "message: " + this.message);
         },
         destroyed: function () {
             console.group('destroyed 销毁完成状态===============》');
-            console.log("%c%s", "color:red","el     : " + this.$el);
+            console.log("%c%s", "color:red", "el     : " + this.$el);
             console.log(this.$el);
-            console.log("%c%s", "color:red","data   : " + this.$data);
-            console.log("%c%s", "color:red","message: " + this.message)
+            console.log("%c%s", "color:red", "data   : " + this.$data);
+            console.log("%c%s", "color:red", "message: " + this.message)
         },
         methods: {
-            test:function () {
+            test: function () {
                 console.log(this)
             },
-            test1: ()=>{
+            test1: () => {
                 console.log(this)
             },
-            change () {
+            change() {
                 this.message += '1';
-                this.me2 +='1';
+                this.me2 += '1';
             },
-            change2 () {
+            change2() {
                 this.message += '1';
                 this.change3();
             },
-            change3:function () {
-                this.me2 +='1';
+            change3: function () {
+                this.me2 += '1';
             },
-            change4 () {
+            change4() {
                 delete this.myobj.b.d;
+            },
+            pushArr() {
+                this.arr1.push(a);
+                console.log('arr1 includes b:', this.arr1.includes(b));
             }
         }
     })
