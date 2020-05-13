@@ -140,11 +140,11 @@
     }
 
     function randomRGBColor() {	//随机生成rgb颜色
-        this.r = Math.floor(Math.random() * 255);
-        this.g = Math.floor(Math.random() * 255);
-        this.b = Math.floor(Math.random() * 255);
-        this.color = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
-        return this.color = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+        function getRGBNumber() {
+            return Math.floor(Math.random() * 255);
+        }
+
+        return 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
     }
 </script>
 </body>

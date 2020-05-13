@@ -36,10 +36,11 @@
         },
         methods: {
             addRandomRGBColor: function () {	//随机生成rgb颜色
-                var r = Math.floor(Math.random() * 255);
-                var g = Math.floor(Math.random() * 255);
-                var b = Math.floor(Math.random() * 255);
-                var randomRGBColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+                function getRGBNumber() {
+                    return Math.floor(Math.random() * 255);
+                }
+
+                var randomRGBColor = 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
                 if (this.colorSet[randomRGBColor]) {
                     this.addRandomRGBColor();
                 } else {
@@ -71,10 +72,11 @@
     var colorSet = new Set();
 
     function getRandomRGBColor() {	//随机生成rgb颜色
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        var randomRGBColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+        function getRGBNumber() {
+            return Math.floor(Math.random() * 255);
+        }
+
+        var randomRGBColor = 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
         if (colorSet.has(randomRGBColor)) {
             getRandomRGBColor();
         } else {
@@ -88,7 +90,7 @@
         vm.colorSet = {};
         vm.colorList = [];
         var creatTimes = document.getElementById('creatTimes').value;
-        var app2 = document.querySelector('#app2');
+        var app2 = document.getElementById('app2');
         app2.innerHTML = '';
         var fragment = document.createDocumentFragment();
         console.time('使用原生渲染');
