@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>grid布局dome</title>
+    <script src="../vue-test/js/vue.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        hr {
+            margin: 5px 0;
+        }
+
+        #app {
+            width: 95vw;
+            border: 5px solid gray;
+            margin: 0 auto;
+            padding: 5px;
+        }
+
+        .grid-body {
+            display: grid;
+            position: relative;
+        }
+
+        .grid-item {
+            text-align: center;
+            font-size: 24px;
+            touch-action: none;
+        }
+
+        .charts-body {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .chart-item {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <label>
+        div尺寸：
+        <input type="text" v-model.number.lazy="baseLength">
+    </label>
+    <label>
+        div间距：
+        <input type="text" v-model.number.lazy="baseMargin">
+    </label>
+    <label>
+        行：
+        <input type="text" v-model.number.lazy="row">
+    </label>
+    <label>
+        列：
+        <input type="text" v-model.number.lazy="col">
+    </label>
+    <label>
+        是否显示charts-body
+        <input type="checkbox" v-model="show">
+    </label>
+    <hr>
+    <label>
+        新chart插入的index：
+        <input type="text" v-model.number.lazy="newIndex">
+    </label>
+    <label>
+        新chart的尺寸：
+        <input type="text" v-model.number.lazy="newCol">
+        *
+        <input type="text" v-model.number.lazy="newRow">
+        <button @click="addChart">添加新chart</button>
+    </label>
+    <hr>
+    <div
+        class="grid-body"
+        :style="{
+            gridTemplateRows: `repeat(${row}, ${baseLength}px)`,
+            gridTemplateColumns: `repeat(${col}, ${baseLength}px)`,
+            gridRowGap: `${baseMargin}px`,
+            gridColumnGap: `${baseMargin}px`,
+            width: `${col*baseLength+(col-1)*baseMargin}px`,
+            height: `${row*baseLength+(row-1)*baseMargin}px`,
+        }"
+    >
+        <div
+            v-for="index in row*col"
+            :key="index"
+            class="grid-item"
+            :style="{
+                backgroundColor:'rgba(232,232,232,0.7)',
+            }"
+        >
+            <span>b{{index}}</span>
+        </div>
+        <div
+            v-show="show"
+            class="charts-body"
+        >
+            <div
+                v-for="(chart,index) in charts"
+                :key="index"
+                class="grid-item chart-item"
+                :style="{
+                    backgroundColor:randomRGBColor(),
+                    width: `${chart.col*baseLength+(chart.col-1)*baseMargin}px`,
+                    height: `${chart.row*baseLength+(chart.row-1)*baseMargin}px`,
+                    transform: `translate(${((chart.startIndex-1)%col)*(baseLength+baseMargin)}px, ${parseInt((chart.startIndex-1)/col)*(baseLength+baseMargin)}px)`,
+               }"
+            >
+                <span>{{index}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            baseLength: 160,
+            baseMargin: 10,
+            row: 3,
+            col: 4,
+            show: true,
+            charts: [
+                {
+                    startIndex: 2,
+                    row: 2,
+                    col: 1,
+                }
+            ],
+            newIndex: 1,
+            newRow: 1,
+            newCol: 1,
+        },
+        created: function () {
+        },
+        mounted: function () {
+        },
+        methods: {
+            randomRGBColor() {	//随机生成rgb颜色
+                r = Math.floor(Math.random() * 255);
+                g = Math.floor(Math.random() * 255);
+                b = Math.floor(Math.random() * 255);
+                return 'rgb(' + r + ',' + g + ',' + b + ')';
+            },
+            addChart() {
+                this.charts.push({
+                    startIndex: this.newIndex,
+                    row: this.newRow,
+                    col: this.newCol,
+                })
+            }
+        }
+    })
+</script>
+</html>

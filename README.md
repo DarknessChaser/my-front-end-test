@@ -31,6 +31,11 @@
 
 [点击查看](https://darknesschaser.github.io/my-front-end-test/div-random-color-test/div-random-color-test.html)
 
+## grid-test
+仿Azure devOps dashboard自定义图表布局。
+
+[点击查看](https://darknesschaser.github.io/my-front-end-test/grid-test/index.html)
+
 ## images-lazyload-test
 懒加载图片的测试dome。
 
