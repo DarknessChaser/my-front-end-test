@@ -76,11 +76,12 @@
     </label>
     <label>
         新chart的尺寸：
-        <input type="text" v-model.number.lazy="newCol">
+        <input type="text" v-model.number.lazy="newWidth">
         *
-        <input type="text" v-model.number.lazy="newRow">
+        <input type="text" v-model.number.lazy="newHeight">
         <button @click="addChart">添加新chart</button>
     </label>
+    最新chart参数：{{charts[charts.length-1]}}
     <hr>
     <div
         class="grid-body"
@@ -113,9 +114,9 @@
                 class="grid-item chart-item"
                 :style="{
                     backgroundColor:randomRGBColor(),
-                    width: `${chart.col*baseLength+(chart.col-1)*baseMargin}px`,
-                    height: `${chart.row*baseLength+(chart.row-1)*baseMargin}px`,
-                    transform: `translate(${((chart.startIndex-1)%col)*(baseLength+baseMargin)}px, ${parseInt((chart.startIndex-1)/col)*(baseLength+baseMargin)}px)`,
+                    width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
+                    height: `${chart.height*baseLength+(chart.height-1)*baseMargin}px`,
+                    transform: `translate(${(chart.startCol-1)*(baseLength+baseMargin)}px, ${(chart.startRow-1)*(baseLength+baseMargin)}px)`,
                }"
             >
                 <span>{{index}}</span>
@@ -133,16 +134,24 @@
             row: 3,
             col: 4,
             show: true,
-            charts: [
-                {
-                    startIndex: 2,
-                    row: 2,
-                    col: 1,
+            charts: [],
+            newIndex: 9,
+            newHeight: 1,
+            newWidth: 4,
+        },
+        computed: {
+            safeItems() {
+                let safeSets = new Set();
+                for (let i = 1; i <= this.row * this.col; i++) {
+                    safeSets.add(i);
                 }
-            ],
-            newIndex: 1,
-            newRow: 1,
-            newCol: 1,
+                this.charts.forEach((chart) => {
+                    this.getBlocks(chart).forEach((block) => {
+                        safeSets.delete(block);
+                    });
+                })
+                return [...safeSets].sort((a, b) => a - b);
+            },
         },
         created: function () {
         },
@@ -156,12 +165,33 @@
                 return 'rgb(' + r + ',' + g + ',' + b + ')';
             },
             addChart() {
-                this.charts.push({
-                    startIndex: this.newIndex,
-                    row: this.newRow,
-                    col: this.newCol,
-                })
-            }
+                const startRow = parseInt((this.newIndex-1)/this.col)+1;
+                const startCol = (this.newIndex-1)%this.col+1;
+                const newChart = {
+                    startRow,
+                    startCol,
+                    height: this.newHeight,
+                    width: this.newWidth,
+                };
+                if (!this.checkBlocksIsSafe(this.getBlocks(newChart))) {
+                    alert('格子叠起来了！或超出了画布');
+                    return;
+                }
+                this.charts.push(newChart);
+            },
+            getBlocks(chart) {
+                const unsafeBlocks = [];
+                const {startRow, startCol, height, width} = chart;
+                for (let i = 0; i < height; i++) {
+                    for (let j = 0; j < width; j++) {
+                        unsafeBlocks.push((startRow - 1) * this.col + startCol + i * this.col + j);
+                    }
+                }
+                return unsafeBlocks.sort((a, b) => a - b);
+            },
+            checkBlocksIsSafe(blocks) {
+                return blocks.every((block)=>this.safeItems.includes(block));
+            },
         }
     })
 </script>
