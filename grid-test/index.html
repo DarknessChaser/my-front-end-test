@@ -107,6 +107,7 @@
     <div
         v-show="show"
         class="charts-body"
+        @dragover.prevent="handleDragover"
     >
       <div
           v-for="(chart,index) in charts"
@@ -209,6 +210,7 @@
       handleDragstart(e) {
         pageX = e.pageX;
         pageY = e.pageY;
+        e.dataTransfer.effectAllowed = "move";
       },
       handleDragend(e, index) {
         const moveX = e.pageX - pageX;
@@ -227,6 +229,9 @@
         }
         this.$set(this.charts, index, newChart);
       },
+      handleDragover(e) {
+        e.dataTransfer.dropEffect = "move";
+      }
     }
   })
 </script>
