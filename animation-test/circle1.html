@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>圆圈动画</title>
+  <meta charset="UTF-8">
+  <title>圆圈动画</title>
 </head>
 <style>
-    .pie {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        background: #ddd;
-        margin: 0 auto;
-        position: relative;
-        background-image: linear-gradient(to right, transparent 50%, #3195d0 0);
-        animation: spin 1s linear infinite;
-    }
+  .pie {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #ddd;
+    margin: 0 auto;
+    position: relative;
+    background-image: linear-gradient(to right, transparent 50%, #3195d0 0);
+    animation: spin 1s linear infinite;
+  }
 
-    .pie::before {
-        content: '';
-        display: block;
-        margin-left: 50%;
-        height: 100%;
-        background-color: inherit;
-        border-radius: 0 100% 100% 0 / 50%;
-        transform-origin: left;
-        animation: spin2 2s ease-in-out infinite;
-    }
+  .pie::before {
+    content: '';
+    display: block;
+    margin-left: 50%;
+    height: 100%;
+    background-color: inherit;
+    border-radius: 0 100% 100% 0 / 50%;
+    transform-origin: left;
+    animation: spin2 2s ease-in-out infinite;
+  }
 
-    .pie::after {
-        content: '';
-        display: block;
-        height: 80%;
-        width: 80%;
-        position: absolute;
-        z-index: 1;
-        top: 10%;
-        left: 10%;
-        background-color: #fff;
-        border-radius: 50%;
-    }
+  .pie::after {
+    content: '';
+    display: block;
+    height: 80%;
+    width: 80%;
+    position: absolute;
+    z-index: 1;
+    top: 10%;
+    left: 10%;
+    background-color: #fff;
+    border-radius: 50%;
+  }
 
-    @keyframes spin {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(1turn);
-        }
+  @keyframes spin {
+    from {
+      transform: rotate(0);
     }
+    to {
+      transform: rotate(1turn);
+    }
+  }
 
-    @keyframes spin2 {
-        from {
-            transform: rotate(0);
-        }
-        50% {
-            transform: rotate(0.3turn);
-        }
-        to {
-            transform: rotate(0);
-        }
+  @keyframes spin2 {
+    from {
+      transform: rotate(0);
     }
+    50% {
+      transform: rotate(0.3turn);
+    }
+    to {
+      transform: rotate(0);
+    }
+  }
 </style>
 <body>
 <div class="pie"></div>

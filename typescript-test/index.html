@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Typescript测试</title>
+  <meta charset="UTF-8">
+  <title>Typescript测试</title>
 </head>
 <style id="my-style">
-    :root {
-        --global-color: #0f0f0f;
-    }
+  :root {
+    --global-color: #0f0f0f;
+  }
 
-    .output {
-        color: var(--global-color);
-    }
+  .output {
+    color: var(--global-color);
+  }
 </style>
 <body>
 <button onclick="changeColor()">点我变色</button>
@@ -21,104 +21,104 @@
 <input type="text" id="input2">
 <span id="output2" class="output"></span>
 <script>
-    var Scope = function () {
-        this.$$watchers = [];
-    };
+  var Scope = function () {
+    this.$$watchers = [];
+  };
 
-    Scope.prototype.$watch = function (watchExp, listener) {
-        this.$$watchers.push({
-            watchExp: watchExp,
-            listener: listener || function () {
-            }
-        });
-    };
-
-    Scope.prototype.$digest = function () {
-        var dirty;
-
-        do {
-            dirty = false;
-
-            for (var i = 0; i < this.$$watchers.length; i++) {
-                var newValue = this.$$watchers[i].watchExp(),
-                    oldValue = this.$$watchers[i].last;
-
-                if (oldValue !== newValue) {
-                    this.$$watchers[i].listener(newValue, oldValue);
-
-                    dirty = true;
-
-                    this.$$watchers[i].last = newValue;
-                }
-            }
-        } while (dirty);
-    };
-
-
-    var $scope = new Scope();
-
-    $scope.name = 'Ryan';
-
-    var element = document.querySelectorAll('#input2');
-
-    element[0].onkeyup = function () {
-        $scope.name = element[0].value;
-
-        $scope.$digest();
-    };
-
-    $scope.$watch(function () {
-        return $scope.name;
-    }, function (newValue, oldValue) {
-        console.log('Input value updated - it is now ' + newValue);
-
-        element[0].value = $scope.name;
-        document.querySelector('#output2').textContent = $scope.name
+  Scope.prototype.$watch = function (watchExp, listener) {
+    this.$$watchers.push({
+      watchExp: watchExp,
+      listener: listener || function () {
+      }
     });
+  };
 
-    var updateScopeValue = function updateScopeValue() {
-        $scope.name = 'Bob';
-        $scope.$digest();
-    };
+  Scope.prototype.$digest = function () {
+    var dirty;
+
+    do {
+      dirty = false;
+
+      for (var i = 0; i < this.$$watchers.length; i++) {
+        var newValue = this.$$watchers[i].watchExp(),
+          oldValue = this.$$watchers[i].last;
+
+        if (oldValue !== newValue) {
+          this.$$watchers[i].listener(newValue, oldValue);
+
+          dirty = true;
+
+          this.$$watchers[i].last = newValue;
+        }
+      }
+    } while (dirty);
+  };
+
+
+  var $scope = new Scope();
+
+  $scope.name = 'Ryan';
+
+  var element = document.querySelectorAll('#input2');
+
+  element[0].onkeyup = function () {
+    $scope.name = element[0].value;
+
+    $scope.$digest();
+  };
+
+  $scope.$watch(function () {
+    return $scope.name;
+  }, function (newValue, oldValue) {
+    console.log('Input value updated - it is now ' + newValue);
+
+    element[0].value = $scope.name;
+    document.querySelector('#output2').textContent = $scope.name
+  });
+
+  var updateScopeValue = function updateScopeValue() {
+    $scope.name = 'Bob';
+    $scope.$digest();
+  };
 </script>
 <script src="js/test.js"></script>
 <script>
-    var obj = {}
-    Object.defineProperty(obj, 'a', {
-        get: function () {
-            console.log('get val' + a);
-            return a;
-        },
-        set: function (newVal) {
-            console.log('set val:' + newVal);
-            a = newVal;
-            document.querySelector('#output').textContent = newVal;
-        }
-    })
-
-    function change(_this) {
-        obj.a = _this.value;
+  var obj = {}
+  Object.defineProperty(obj, 'a', {
+    get: function () {
+      console.log('get val' + a);
+      return a;
+    },
+    set: function (newVal) {
+      console.log('set val:' + newVal);
+      a = newVal;
+      document.querySelector('#output').textContent = newVal;
     }
+  })
 
-    function randomRGBColor() {	//随机生成rgb颜色
-        this.r = Math.floor(Math.random() * 255);
-        this.g = Math.floor(Math.random() * 255);
-        this.b = Math.floor(Math.random() * 255);
-        return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+  function change(_this) {
+    obj.a = _this.value;
+  }
+
+  function randomRGBColor() {	//随机生成rgb颜色
+    this.r = Math.floor(Math.random() * 255);
+    this.g = Math.floor(Math.random() * 255);
+    this.b = Math.floor(Math.random() * 255);
+    return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+  }
+
+  var time;
+
+  function changeColor() {
+    if (time) {
+      window.clearInterval(time)
+      time = undefined
+    } else {
+      time = setInterval(function () {
+        document.querySelector('#my-style').sheet.cssRules[0].style.cssText = '--global-color: ' + randomRGBColor() + ';'
+      }, '100')
     }
-
-    var time;
-
-    function changeColor() {
-        if (time) {
-            window.clearInterval(time)
-            time = undefined
-        } else {
-            time = setInterval(function () {
-                document.querySelector('#my-style').sheet.cssRules[0].style.cssText = '--global-color: ' + randomRGBColor() + ';'
-            }, '100')
-        }
-    }
+  }
 </script>
 </body>
 </html>

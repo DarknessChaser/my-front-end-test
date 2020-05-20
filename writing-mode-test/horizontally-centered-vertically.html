@@ -1,73 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>水平垂直居中</title>
+  <meta charset="UTF-8">
+  <title>水平垂直居中</title>
 </head>
 <body>
 <style>
-    .demo-box {
-        height: 200px;
-        width: 200px;
-        background: rgb(131, 175, 155);;
-        display: inline-block;
-        border: 1px solid;
-    }
+  .demo-box {
+    height: 200px;
+    width: 200px;
+    background: rgb(131, 175, 155);;
+    display: inline-block;
+    border: 1px solid;
+  }
 
-    .vertical-layout-box {
-        writing-mode: tb-lr;
-        writing-mode: vertical-lr;
-        text-align: center;
-    }
+  .vertical-layout-box {
+    writing-mode: tb-lr;
+    writing-mode: vertical-lr;
+    text-align: center;
+  }
 
-    .horizontal-layout-box {
-        writing-mode: lr-tb;
-        writing-mode: horizontal-tb;
-        text-align: center;
-        width: 100%;
-        display: inline-block;
-    }
+  .horizontal-layout-box {
+    writing-mode: lr-tb;
+    writing-mode: horizontal-tb;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+  }
 
-    .center-content {
-        display: inline-block;
-        text-align: left;
-        text-align: initial;
-    }
+  .center-content {
+    display: inline-block;
+    text-align: left;
+    text-align: initial;
+  }
 </style>
 <div class="vertical-layout-box demo-box">
-    <div class="horizontal-layout-box">
-        <div class="center-content">
-            你想要上下左右居中的内容(元素,文本或其任意组合)
-        </div>
+  <div class="horizontal-layout-box">
+    <div class="center-content">
+      你想要上下左右居中的内容(元素,文本或其任意组合)
     </div>
+  </div>
 </div>
 <div class="vertical-layout-box demo-box">
-    <div class="horizontal-layout-box">
-        <div class="center-content">
-            hello world!<br/>
-            纯文本居中
-        </div>
+  <div class="horizontal-layout-box">
+    <div class="center-content">
+      hello world!<br/>
+      纯文本居中
     </div>
+  </div>
 </div>
 <div class="vertical-layout-box demo-box">
-    <div class="horizontal-layout-box">
-        <div class="center-content">
-            <input type="text" value="hello world!"><br/>
-            <input type="text" value="inline-block元素居中">
-        </div>
+  <div class="horizontal-layout-box">
+    <div class="center-content">
+      <input type="text" value="hello world!"><br/>
+      <input type="text" value="inline-block元素居中">
     </div>
+  </div>
 </div>
 <div class="vertical-layout-box demo-box">
-    <div class="horizontal-layout-box">
-        <div class="center-content">
-            <div>
-                hello world!<br/>
-                一个div<br/>
-                block元素<br/>
-                居中
-            </div>
-        </div>
+  <div class="horizontal-layout-box">
+    <div class="center-content">
+      <div>
+        hello world!<br/>
+        一个div<br/>
+        block元素<br/>
+        居中
+      </div>
     </div>
+  </div>
 </div>
 </body>
 </html>

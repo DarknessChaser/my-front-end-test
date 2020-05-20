@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>IntersectionObserver监控可见性dome</title>
-    <!--引入polyfill-->
-    <script src="./IntersectionObserverPolyfill/intersection-observer.js"></script>
-    <script src="../vue-test/js/vue.js"></script>
-    <style>
-        html, body, .task-title {
-            padding: 0;
-            margin: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>IntersectionObserver监控可见性dome</title>
+  <!--引入polyfill-->
+  <script src="./IntersectionObserverPolyfill/intersection-observer.js"></script>
+  <script src="../vue-test/js/vue.js"></script>
+  <style>
+    html, body, .task-title {
+      padding: 0;
+      margin: 0;
+    }
 
-        .task-list {
-            background-color: #1b6d85;
-        }
+    .task-list {
+      background-color: #1b6d85;
+    }
 
-        .task-title {
-            background-color: #28a4c9;
-        }
+    .task-title {
+      background-color: #28a4c9;
+    }
 
-        .task-item {
-            line-height: 10vh;
-            background-color: #009688;
-            border-top: #afd9ee solid 1px;
-        }
-    </style>
+    .task-item {
+      line-height: 10vh;
+      background-color: #009688;
+      border-top: #afd9ee solid 1px;
+    }
+  </style>
 </head>
 <body>
 <div id="app">
-    <div class="task-list">
-        <h2 class="task-title">这里是被浏览过task的列表{{viewedTask}}</h2>
-        <label for="taskNum">
-            输入生成task的数量
-            <input id="taskNum" v-model.number.lazy="taskNum" type="number">
-        </label>
-        <div class="task-item" v-for="num in taskNum" :key="num" :data-task-id="num">这里是第{{num}}个task</div>
-    </div>
+  <div class="task-list">
+    <h2 class="task-title">这里是被浏览过task的列表{{viewedTask}}</h2>
+    <label for="taskNum">
+      输入生成task的数量
+      <input id="taskNum" v-model.number.lazy="taskNum" type="number">
+    </label>
+    <div class="task-item" v-for="num in taskNum" :key="num" :data-task-id="num">这里是第{{num}}个task</div>
+  </div>
 </div>
 </body>
 <script>
-    var vm = new Vue({
-        el: '#app',
-        data: {
-            taskNum: 0,
-            viewedTask: []
-        },
-        beforeCreate: function () {
-        },
-        created: function () {
-        },
-        beforeMount: function () {
-        },
-        mounted: function () {
-        },
-        beforeUpdate: function () {
-        },
-        updated: function () {
-        },
-        beforeDestroy: function () {
-            this.destroyedObserver(this.observer);
-        },
-        destroyed: function () {
-        },
-        methods: {
-            watchViewed: function () {
-                this.observer = new IntersectionObserver(
-                    function (changes) {
-                        changes.forEach(function (change) {
-                            if (change.intersectionRatio > 0) {
-                                var container = change.target;
-                                var taskId = container.dataset.taskId;
-                                if (vm.viewedTask.indexOf(taskId) === -1) {
-                                    vm.viewedTask.push(taskId);
-                                }
-                                vm.observer.unobserve(container);
-                            }
-                        });
-                    }
-                );
-
-                [...document.querySelectorAll('.task-item')].forEach(function (item) {
-                    vm.observer.observe(item);
-                });
-            },
-            destroyedObserver: function (observer) {
-                if (observer) {
-                    observer.disconnect();
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      taskNum: 0,
+      viewedTask: []
+    },
+    beforeCreate: function () {
+    },
+    created: function () {
+    },
+    beforeMount: function () {
+    },
+    mounted: function () {
+    },
+    beforeUpdate: function () {
+    },
+    updated: function () {
+    },
+    beforeDestroy: function () {
+      this.destroyedObserver(this.observer);
+    },
+    destroyed: function () {
+    },
+    methods: {
+      watchViewed: function () {
+        this.observer = new IntersectionObserver(
+          function (changes) {
+            changes.forEach(function (change) {
+              if (change.intersectionRatio > 0) {
+                var container = change.target;
+                var taskId = container.dataset.taskId;
+                if (vm.viewedTask.indexOf(taskId) === -1) {
+                  vm.viewedTask.push(taskId);
                 }
-            }
-        },
-        watch: {
-            taskNum: function () {
-                this.destroyedObserver(this.observer);
-                this.$nextTick(this.watchViewed);
-            }
+                vm.observer.unobserve(container);
+              }
+            });
+          }
+        );
+
+        [...document.querySelectorAll('.task-item')].forEach(function (item) {
+          vm.observer.observe(item);
+        });
+      },
+      destroyedObserver: function (observer) {
+        if (observer) {
+          observer.disconnect();
         }
-    })
+      }
+    },
+    watch: {
+      taskNum: function () {
+        this.destroyedObserver(this.observer);
+        this.$nextTick(this.watchViewed);
+      }
+    }
+  })
 </script>
 </html>

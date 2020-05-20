@@ -1,91 +1,91 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>grid布局dome</title>
-    <script src="../vue-test/js/vue.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>grid布局dome</title>
+  <script src="../vue-test/js/vue.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-        hr {
-            margin: 5px 0;
-        }
+    hr {
+      margin: 5px 0;
+    }
 
-        #app {
-            width: 95vw;
-            border: 5px solid gray;
-            margin: 0 auto;
-            padding: 5px;
-        }
+    #app {
+      width: 95vw;
+      border: 5px solid gray;
+      margin: 0 auto;
+      padding: 5px;
+    }
 
-        .grid-body {
-            display: grid;
-            position: relative;
-        }
+    .grid-body {
+      display: grid;
+      position: relative;
+    }
 
-        .grid-item {
-            text-align: center;
-            font-size: 24px;
-            touch-action: none;
-        }
+    .grid-item {
+      text-align: center;
+      font-size: 24px;
+      touch-action: none;
+    }
 
-        .charts-body {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-        }
+    .charts-body {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
 
-        .chart-item {
-            position: absolute;
-        }
-    </style>
+    .chart-item {
+      position: absolute;
+    }
+  </style>
 </head>
 <body>
 <div id="app">
-    <label>
-        div尺寸：
-        <input type="text" v-model.number.lazy="baseLength">
-    </label>
-    <label>
-        div间距：
-        <input type="text" v-model.number.lazy="baseMargin">
-    </label>
-    <label>
-        行：
-        <input type="text" v-model.number.lazy="row">
-    </label>
-    <label>
-        列：
-        <input type="text" v-model.number.lazy="col">
-    </label>
-    <label>
-        是否显示charts-body
-        <input type="checkbox" v-model="show">
-    </label>
-    <hr>
-    <label>
-        新chart插入的index：
-        <input type="text" v-model.number.lazy="newIndex">
-    </label>
-    <label>
-        新chart的尺寸：
-        <input type="text" v-model.number.lazy="newWidth">
-        *
-        <input type="text" v-model.number.lazy="newHeight">
-        <button @click="addChart">添加新chart</button>
-    </label>
-    最新chart参数：{{charts[charts.length-1]}}
-    <hr>
-    <div
-        class="grid-body"
-        :style="{
+  <label>
+    div尺寸：
+    <input type="text" v-model.number.lazy="baseLength">
+  </label>
+  <label>
+    div间距：
+    <input type="text" v-model.number.lazy="baseMargin">
+  </label>
+  <label>
+    行：
+    <input type="text" v-model.number.lazy="row">
+  </label>
+  <label>
+    列：
+    <input type="text" v-model.number.lazy="col">
+  </label>
+  <label>
+    是否显示charts-body
+    <input type="checkbox" v-model="show">
+  </label>
+  <hr>
+  <label>
+    新chart插入的index：
+    <input type="text" v-model.number.lazy="newIndex">
+  </label>
+  <label>
+    新chart的尺寸：
+    <input type="text" v-model.number.lazy="newWidth">
+    *
+    <input type="text" v-model.number.lazy="newHeight">
+    <button @click="addChart">添加新chart</button>
+  </label>
+  最新chart参数：{{charts[charts.length-1]}}
+  <hr>
+  <div
+      class="grid-body"
+      :style="{
             gridTemplateRows: `repeat(${row}, ${baseLength}px)`,
             gridTemplateColumns: `repeat(${col}, ${baseLength}px)`,
             gridRowGap: `${baseMargin}px`,
@@ -93,141 +93,141 @@
             width: `${col*baseLength+(col-1)*baseMargin}px`,
             height: `${row*baseLength+(row-1)*baseMargin}px`,
         }"
-    >
-        <div
-            v-for="index in row*col"
-            :key="index"
-            class="grid-item"
-            :style="{
+  >
+    <div
+        v-for="index in row*col"
+        :key="index"
+        class="grid-item"
+        :style="{
                 backgroundColor:'rgba(232,232,232,0.7)',
             }"
-        >
-            <span>b{{index}}</span>
-        </div>
-        <div
-            v-show="show"
-            class="charts-body"
-        >
-            <div
-                v-for="(chart,index) in charts"
-                :key="index"
-                class="grid-item chart-item"
-                draggable="true"
-                @dragstart="handleDragstart"
-                @dragend="handleDragend($event,index)"
-                :style="{
+    >
+      <span>b{{index}}</span>
+    </div>
+    <div
+        v-show="show"
+        class="charts-body"
+    >
+      <div
+          v-for="(chart,index) in charts"
+          :key="index"
+          class="grid-item chart-item"
+          draggable="true"
+          @dragstart="handleDragstart"
+          @dragend="handleDragend($event,index)"
+          :style="{
                     backgroundColor:randomRGBColor(),
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
                     height: `${chart.height*baseLength+(chart.height-1)*baseMargin}px`,
                     transform: `translate(${(chart.startCol-1)*(baseLength+baseMargin)}px, ${(chart.startRow-1)*(baseLength+baseMargin)}px)`,
                }"
-            >
-                <span>{{index}}</span>
-            </div>
-        </div>
+      >
+        <span>{{index}}</span>
+      </div>
     </div>
+  </div>
 </div>
 </body>
 <script>
-    let pageX, pageY;
-    var vm = new Vue({
-        el: '#app',
-        data: {
-            baseLength: 160,
-            baseMargin: 10,
-            row: 3,
-            col: 4,
-            show: true,
-            charts: [],
-            newIndex: 5,
-            newHeight: 2,
-            newWidth: 2,
-        },
-        computed: {
-            safeItems() {
-                let safeSets = new Set();
-                for (let i = 1; i <= this.row * this.col; i++) {
-                    safeSets.add(i);
-                }
-                this.charts.forEach((chart) => {
-                    this.getBlocks(chart).forEach((block) => {
-                        safeSets.delete(block);
-                    });
-                })
-                return [...safeSets].sort((a, b) => a - b);
-            },
-        },
-        created: function () {
-        },
-        mounted: function () {
-        },
-        methods: {
-            randomRGBColor() {	//随机生成rgb颜色
-                r = Math.floor(Math.random() * 255);
-                g = Math.floor(Math.random() * 255);
-                b = Math.floor(Math.random() * 255);
-                return 'rgb(' + r + ',' + g + ',' + b + ')';
-            },
-            addChart() {
-                const startRow = parseInt((this.newIndex-1)/this.col)+1;
-                const startCol = (this.newIndex-1)%this.col+1;
-                const newChart = {
-                    startRow,
-                    startCol,
-                    height: this.newHeight,
-                    width: this.newWidth,
-                };
-                if (!this.checkBlocksIsSafe(newChart)) {
-                    return;
-                }
-                this.charts.push(newChart);
-            },
-            getBlocks(chart) {
-                const unsafeBlocks = [];
-                const {startRow, startCol, height, width} = chart;
-                for (let i = 0; i < height; i++) {
-                    for (let j = 0; j < width; j++) {
-                        unsafeBlocks.push((startRow - 1) * this.col + startCol + i * this.col + j);
-                    }
-                }
-                return unsafeBlocks.sort((a, b) => a - b);
-            },
-            checkBlocksIsSafe(chart, oldChart = {}) {
-                const {startRow, startCol, height, width} = chart;
-                if (startRow < 1 || startRow + height-  1 > this.row || startCol < 1 || startCol + width-  1 > this.col) {
-                  alert('格子超出了画布！');
-                  return false;
-                }
-                const blocks = this.getBlocks(chart);
-                const oldBlocks = this.getBlocks(oldChart);
-                if (blocks.every((block) => [...this.safeItems, ...oldBlocks].includes(block))) {
-                  return true;
-                }
-                alert('格子叠起来了！');
-                return false;
-            },
-            handleDragstart(e) {
-                pageX = e.pageX;
-                pageY = e.pageY;
-            },
-            handleDragend(e, index) {
-                const moveX = e.pageX - pageX;
-                const moveY = e.pageY - pageY;
-                const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
-                const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
-                const targetChart = this.charts[index];
-                const newChart = {
-                    startCol: targetChart.startCol + moveCol,
-                    startRow: targetChart.startRow + moveRow,
-                    height: targetChart.height,
-                    width: targetChart.width,
-                };
-                if (!this.checkBlocksIsSafe(newChart, targetChart)) {
-                  return;
-                }
-                this.$set(this.charts, index, newChart);
-            },
+  let pageX, pageY;
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      baseLength: 160,
+      baseMargin: 10,
+      row: 3,
+      col: 4,
+      show: true,
+      charts: [],
+      newIndex: 5,
+      newHeight: 2,
+      newWidth: 2,
+    },
+    computed: {
+      safeItems() {
+        let safeSets = new Set();
+        for (let i = 1; i <= this.row * this.col; i++) {
+          safeSets.add(i);
         }
-    })
+        this.charts.forEach((chart) => {
+          this.getBlocks(chart).forEach((block) => {
+            safeSets.delete(block);
+          });
+        })
+        return [...safeSets].sort((a, b) => a - b);
+      },
+    },
+    created: function () {
+    },
+    mounted: function () {
+    },
+    methods: {
+      randomRGBColor() {	//随机生成rgb颜色
+        r = Math.floor(Math.random() * 255);
+        g = Math.floor(Math.random() * 255);
+        b = Math.floor(Math.random() * 255);
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+      },
+      addChart() {
+        const startRow = parseInt((this.newIndex - 1) / this.col) + 1;
+        const startCol = (this.newIndex - 1) % this.col + 1;
+        const newChart = {
+          startRow,
+          startCol,
+          height: this.newHeight,
+          width: this.newWidth,
+        };
+        if (!this.checkBlocksIsSafe(newChart)) {
+          return;
+        }
+        this.charts.push(newChart);
+      },
+      getBlocks(chart) {
+        const unsafeBlocks = [];
+        const {startRow, startCol, height, width} = chart;
+        for (let i = 0; i < height; i++) {
+          for (let j = 0; j < width; j++) {
+            unsafeBlocks.push((startRow - 1) * this.col + startCol + i * this.col + j);
+          }
+        }
+        return unsafeBlocks.sort((a, b) => a - b);
+      },
+      checkBlocksIsSafe(chart, oldChart = {}) {
+        const {startRow, startCol, height, width} = chart;
+        if (startRow < 1 || startRow + height - 1 > this.row || startCol < 1 || startCol + width - 1 > this.col) {
+          alert('格子超出了画布！');
+          return false;
+        }
+        const blocks = this.getBlocks(chart);
+        const oldBlocks = this.getBlocks(oldChart);
+        if (blocks.every((block) => [...this.safeItems, ...oldBlocks].includes(block))) {
+          return true;
+        }
+        alert('格子叠起来了！');
+        return false;
+      },
+      handleDragstart(e) {
+        pageX = e.pageX;
+        pageY = e.pageY;
+      },
+      handleDragend(e, index) {
+        const moveX = e.pageX - pageX;
+        const moveY = e.pageY - pageY;
+        const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
+        const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
+        const targetChart = this.charts[index];
+        const newChart = {
+          startCol: targetChart.startCol + moveCol,
+          startRow: targetChart.startRow + moveRow,
+          height: targetChart.height,
+          width: targetChart.width,
+        };
+        if (!this.checkBlocksIsSafe(newChart, targetChart)) {
+          return;
+        }
+        this.$set(this.charts, index, newChart);
+      },
+    }
+  })
 </script>
 </html>

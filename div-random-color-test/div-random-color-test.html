@@ -1,119 +1,119 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>渲染大量随机不重复颜色div测试</title>
-    <style>
-        .color-div {
-            float: left;
-            width: 50px;
-            height: 50px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>渲染大量随机不重复颜色div测试</title>
+  <style>
+    .color-div {
+      float: left;
+      width: 50px;
+      height: 50px;
+    }
+  </style>
 </head>
 <body>
 <div id="app">
-    <label>
-        <input id="creatTimes" type="text" v-model="creatTimes">
-    </label>
-    <button type="button" @click="creatColorList()">使用Vue渲染</button>
-    <button type="button" onclick="creatColorDivList()">使用原生渲染</button>
-    <hr>
-    <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
-         :key="color" @click="exchangeColor(color)"></div>
+  <label>
+    <input id="creatTimes" type="text" v-model="creatTimes">
+  </label>
+  <button type="button" @click="creatColorList()">使用Vue渲染</button>
+  <button type="button" onclick="creatColorDivList()">使用原生渲染</button>
+  <hr>
+  <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
+       :key="color" @click="exchangeColor(color)"></div>
 </div>
 <div id="app2"></div>
 <script src="../vue-test/js/vue.js"></script>
 <script>
-    var vm = new Vue({
-        el: '#app',
-        data: {
-            creatTimes: 0,
-            colorSet: {},
-            colorList: []
-        },
-        methods: {
-            addRandomRGBColor: function () {	//随机生成rgb颜色
-                function getRGBNumber() {
-                    return Math.floor(Math.random() * 255);
-                }
-
-                var randomRGBColor = 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
-                if (this.colorSet[randomRGBColor]) {
-                    this.addRandomRGBColor();
-                } else {
-                    this.colorSet[randomRGBColor] = true;
-                    return randomRGBColor;
-                }
-            },
-            creatColorList: function () {
-                document.querySelector('#app2').innerHTML = '';
-                this.colorSet = {};
-                console.time('使用Vue渲染');
-                for (var i = 0; i < this.creatTimes; i += 1) {
-                    this.addRandomRGBColor();
-                }
-                this.colorList = Object.keys(this.colorSet);
-                this.$nextTick(() => {
-                        console.timeEnd('使用Vue渲染');
-                    }
-                )
-            },
-            exchangeColor: function (color) {
-                var randomRGBColor = this.addRandomRGBColor();
-                this.$delete(this.colorSet, color);
-                this.$set(this.colorList, this.colorList.indexOf(color), randomRGBColor);
-            }
-        }
-    });
-
-    var colorSet = new Set();
-
-    function getRandomRGBColor() {	//随机生成rgb颜色
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      creatTimes: 0,
+      colorSet: {},
+      colorList: []
+    },
+    methods: {
+      addRandomRGBColor: function () {	//随机生成rgb颜色
         function getRGBNumber() {
-            return Math.floor(Math.random() * 255);
+          return Math.floor(Math.random() * 255);
         }
 
         var randomRGBColor = 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
-        if (colorSet.has(randomRGBColor)) {
-            getRandomRGBColor();
+        if (this.colorSet[randomRGBColor]) {
+          this.addRandomRGBColor();
         } else {
-            colorSet.add(randomRGBColor);
-            return randomRGBColor;
+          this.colorSet[randomRGBColor] = true;
+          return randomRGBColor;
         }
+      },
+      creatColorList: function () {
+        document.querySelector('#app2').innerHTML = '';
+        this.colorSet = {};
+        console.time('使用Vue渲染');
+        for (var i = 0; i < this.creatTimes; i += 1) {
+          this.addRandomRGBColor();
+        }
+        this.colorList = Object.keys(this.colorSet);
+        this.$nextTick(() => {
+            console.timeEnd('使用Vue渲染');
+          }
+        )
+      },
+      exchangeColor: function (color) {
+        var randomRGBColor = this.addRandomRGBColor();
+        this.$delete(this.colorSet, color);
+        this.$set(this.colorList, this.colorList.indexOf(color), randomRGBColor);
+      }
+    }
+  });
+
+  var colorSet = new Set();
+
+  function getRandomRGBColor() {	//随机生成rgb颜色
+    function getRGBNumber() {
+      return Math.floor(Math.random() * 255);
     }
 
-    function creatColorDivList() {
-        colorSet.clear();
-        vm.colorSet = {};
-        vm.colorList = [];
-        var creatTimes = document.getElementById('creatTimes').value;
-        var app2 = document.getElementById('app2');
-        app2.innerHTML = '';
-        var fragment = document.createDocumentFragment();
-        console.time('使用原生渲染');
-        for (var i = 0; i < creatTimes; i += 1) {
-            var div = document.createElement('div');
-            div.className = 'color-div';
-            div.style.backgroundColor = getRandomRGBColor();
-            div.onclick = function () {
-                exchangeColor(this);
-            };
-            fragment.appendChild(div);
-            if (i === creatTimes - 1) {
-                console.timeEnd('使用原生渲染');
-                app2.appendChild(fragment);
-            }
-        }
+    var randomRGBColor = 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
+    if (colorSet.has(randomRGBColor)) {
+      getRandomRGBColor();
+    } else {
+      colorSet.add(randomRGBColor);
+      return randomRGBColor;
     }
+  }
 
-    function exchangeColor(targetDom) {
-        var randomRGBColor = getRandomRGBColor();
-        colorSet.delete(targetDom.style.backgroundColor);
-        targetDom.style.backgroundColor = randomRGBColor;
+  function creatColorDivList() {
+    colorSet.clear();
+    vm.colorSet = {};
+    vm.colorList = [];
+    var creatTimes = document.getElementById('creatTimes').value;
+    var app2 = document.getElementById('app2');
+    app2.innerHTML = '';
+    var fragment = document.createDocumentFragment();
+    console.time('使用原生渲染');
+    for (var i = 0; i < creatTimes; i += 1) {
+      var div = document.createElement('div');
+      div.className = 'color-div';
+      div.style.backgroundColor = getRandomRGBColor();
+      div.onclick = function () {
+        exchangeColor(this);
+      };
+      fragment.appendChild(div);
+      if (i === creatTimes - 1) {
+        console.timeEnd('使用原生渲染');
+        app2.appendChild(fragment);
+      }
     }
+  }
+
+  function exchangeColor(targetDom) {
+    var randomRGBColor = getRandomRGBColor();
+    colorSet.delete(targetDom.style.backgroundColor);
+    targetDom.style.backgroundColor = randomRGBColor;
+  }
 </script>
 </body>
 </html>

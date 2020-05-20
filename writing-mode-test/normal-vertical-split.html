@@ -1,122 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>垂直平分高度</title>
+  <meta charset="UTF-8">
+  <title>垂直平分高度</title>
 </head>
 <body>
 <div class="fixed-div">
-    <button type="button" onclick="addDiv()">新增随机div</button>
+  <button type="button" onclick="addDiv()">新增随机div</button>
 </div>
 <div class="main vertica-mode">
-    <table class="layout-table">
-        <tbody>
-        <tr>
-            <td>
-                <div class="layout-div horizontal-mode layout-div1">第1个div</div>
-            </td>
-            <td>
-                <div class="layout-div horizontal-mode layout-div2">第2个div</div>
-            </td>
-            <td>
-                <div class="layout-div horizontal-mode layout-div3">第3个div</div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+  <table class="layout-table">
+    <tbody>
+    <tr>
+      <td>
+        <div class="layout-div horizontal-mode layout-div1">第1个div</div>
+      </td>
+      <td>
+        <div class="layout-div horizontal-mode layout-div2">第2个div</div>
+      </td>
+      <td>
+        <div class="layout-div horizontal-mode layout-div3">第3个div</div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 <style>
-    html {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-    }
+  html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
 
-    body {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-    }
+  body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
 
-    .vertica-mode {
-        writing-mode: tb-lr;
-        -webkit-writing-mode: vertical-lr;
-        writing-mode: vertical-lr;
-    }
+  .vertica-mode {
+    writing-mode: tb-lr;
+    -webkit-writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+  }
 
-    .horizontal-mode {
-        writing-mode: lr-tb;
-        -webkit-writing-mode: horizontal-tb;
-        writing-mode: horizontal-tb;
-    }
+  .horizontal-mode {
+    writing-mode: lr-tb;
+    -webkit-writing-mode: horizontal-tb;
+    writing-mode: horizontal-tb;
+  }
 
-    .fixed-div {
-        position: fixed;
-        top: 50%;
-        right: 0;
-        background-color: #ffffff;
-    }
+  .fixed-div {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    background-color: #ffffff;
+  }
 
-    .main {
-        height: 100%;
-        width: 100%;
-        background-color: #0c5460;
-    }
+  .main {
+    height: 100%;
+    width: 100%;
+    background-color: #0c5460;
+  }
 
-    .layout-table {
-        width: 100%;
-        height: 100%;
-        border-spacing: 0;
-    }
+  .layout-table {
+    width: 100%;
+    height: 100%;
+    border-spacing: 0;
+  }
 
-    .layout-table tr {
-        padding: 0;
-    }
+  .layout-table tr {
+    padding: 0;
+  }
 
-    .layout-table td {
-        width: 100%;
-        padding: 0;
-    }
+  .layout-table td {
+    width: 100%;
+    padding: 0;
+  }
 
-    .layout-div {
-        width: 100%;
-        height: 100%;
-    }
+  .layout-div {
+    width: 100%;
+    height: 100%;
+  }
 
-    .layout-div1 {
-        background-color: #2ea1f8;
-    }
+  .layout-div1 {
+    background-color: #2ea1f8;
+  }
 
-    .layout-div2 {
-        background-color: #80bdff;
-    }
+  .layout-div2 {
+    background-color: #80bdff;
+  }
 
-    .layout-div3 {
-        background-color: #383d41;
-    }
+  .layout-div3 {
+    background-color: #383d41;
+  }
 </style>
 <script>
-    function addDiv() {
-        var divNumber = document.querySelectorAll('.layout-div').length + 1;
-        var layoutTr = document.querySelector('.layout-table').querySelector('tr');
-        var newTd = document.createElement('td');
-        var newDiv = document.createElement('div');
-        newDiv.style.backgroundColor = randomRGBColor();
-        newDiv.setAttribute('class', 'layout-div horizontal-mode');
-        newDiv.textContent = '第' + divNumber + '个div';
-        newTd.appendChild(newDiv);
-        layoutTr.appendChild(newTd);
+  function addDiv() {
+    var divNumber = document.querySelectorAll('.layout-div').length + 1;
+    var layoutTr = document.querySelector('.layout-table').querySelector('tr');
+    var newTd = document.createElement('td');
+    var newDiv = document.createElement('div');
+    newDiv.style.backgroundColor = randomRGBColor();
+    newDiv.setAttribute('class', 'layout-div horizontal-mode');
+    newDiv.textContent = '第' + divNumber + '个div';
+    newTd.appendChild(newDiv);
+    layoutTr.appendChild(newTd);
+  }
+
+  function randomRGBColor() {	//随机生成rgb颜色
+    function getRGBNumber() {
+      return Math.floor(Math.random() * 255);
     }
 
-    function randomRGBColor() {	//随机生成rgb颜色
-        function getRGBNumber() {
-            return Math.floor(Math.random() * 255);
-        }
-
-        return 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
-    }
+    return 'rgb(' + getRGBNumber() + ',' + getRGBNumber() + ',' + getRGBNumber() + ')';
+  }
 </script>
 </body>
 </html>

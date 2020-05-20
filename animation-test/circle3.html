@@ -1,73 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>圆圈动画</title>
+  <meta charset="UTF-8">
+  <title>圆圈动画</title>
 </head>
 <style>
-    :root {
-        --global-color: #3195d0;
-    }
-    .pie {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        background: #ddd;
-        margin: 0 auto;
-        position: relative;
-        background-image: linear-gradient(to right, transparent 50%, var(--global-color) 0);
-    }
+  :root {
+    --global-color: #3195d0;
+  }
 
-    .pie::before {
-        content: '';
-        display: block;
-        margin-left: 50%;
-        height: 100%;
-        background-color: inherit;
-        border-radius: 0 100% 100% 0 / 50%;
-        transform-origin: left;
-    }
+  .pie {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #ddd;
+    margin: 0 auto;
+    position: relative;
+    background-image: linear-gradient(to right, transparent 50%, var(--global-color) 0);
+  }
 
-    .left.pie::before {
-        animation: spin-right 1s linear 1 forwards, spin-left 0.8s 1s linear 1 forwards;
-    }
+  .pie::before {
+    content: '';
+    display: block;
+    margin-left: 50%;
+    height: 100%;
+    background-color: inherit;
+    border-radius: 0 100% 100% 0 / 50%;
+    transform-origin: left;
+  }
 
-    .right.pie::before {
-        animation: spin-right 1s linear 1 forwards;
-    }
+  .left.pie::before {
+    animation: spin-right 1s linear 1 forwards, spin-left 0.8s 1s linear 1 forwards;
+  }
 
-    .pie::after {
-        content: '';
-        display: block;
-        height: 80%;
-        width: 80%;
-        position: absolute;
-        z-index: 1;
-        top: 10%;
-        left: 10%;
-        background-color: #fff;
-        border-radius: 50%;
-    }
+  .right.pie::before {
+    animation: spin-right 1s linear 1 forwards;
+  }
 
-    @keyframes spin-right {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(.5turn);
-        }
-    }
+  .pie::after {
+    content: '';
+    display: block;
+    height: 80%;
+    width: 80%;
+    position: absolute;
+    z-index: 1;
+    top: 10%;
+    left: 10%;
+    background-color: #fff;
+    border-radius: 50%;
+  }
 
-    @keyframes spin-left {
-        from {
-            transform: rotate(0);
-            background: var(--global-color);
-        }
-        to {
-            transform: rotate(.4turn);
-            background: var(--global-color);
-        }
+  @keyframes spin-right {
+    from {
+      transform: rotate(0);
     }
+    to {
+      transform: rotate(.5turn);
+    }
+  }
+
+  @keyframes spin-left {
+    from {
+      transform: rotate(0);
+      background: var(--global-color);
+    }
+    to {
+      transform: rotate(.4turn);
+      background: var(--global-color);
+    }
+  }
 </style>
 <body>
 <div class="pie left"></div>
