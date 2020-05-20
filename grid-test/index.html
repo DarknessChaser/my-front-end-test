@@ -112,6 +112,9 @@
                 v-for="(chart,index) in charts"
                 :key="index"
                 class="grid-item chart-item"
+                draggable="true"
+                @dragstart="handleDragstart"
+                @dragend="handleDragend($event,index)"
                 :style="{
                     backgroundColor:randomRGBColor(),
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
@@ -126,6 +129,7 @@
 </div>
 </body>
 <script>
+    let pageX, pageY;
     var vm = new Vue({
         el: '#app',
         data: {
@@ -135,9 +139,9 @@
             col: 4,
             show: true,
             charts: [],
-            newIndex: 9,
-            newHeight: 1,
-            newWidth: 4,
+            newIndex: 5,
+            newHeight: 2,
+            newWidth: 2,
         },
         computed: {
             safeItems() {
@@ -173,8 +177,7 @@
                     height: this.newHeight,
                     width: this.newWidth,
                 };
-                if (!this.checkBlocksIsSafe(this.getBlocks(newChart))) {
-                    alert('格子叠起来了！或超出了画布');
+                if (!this.checkBlocksIsSafe(newChart)) {
                     return;
                 }
                 this.charts.push(newChart);
@@ -189,8 +192,40 @@
                 }
                 return unsafeBlocks.sort((a, b) => a - b);
             },
-            checkBlocksIsSafe(blocks) {
-                return blocks.every((block)=>this.safeItems.includes(block));
+            checkBlocksIsSafe(chart, oldChart = {}) {
+                const {startRow, startCol, height, width} = chart;
+                if (startRow < 1 || startRow + height-  1 > this.row || startCol < 1 || startCol + width-  1 > this.col) {
+                  alert('格子超出了画布！');
+                  return false;
+                }
+                const blocks = this.getBlocks(chart);
+                const oldBlocks = this.getBlocks(oldChart);
+                if (blocks.every((block) => [...this.safeItems, ...oldBlocks].includes(block))) {
+                  return true;
+                }
+                alert('格子叠起来了！');
+                return false;
+            },
+            handleDragstart(e) {
+                pageX = e.pageX;
+                pageY = e.pageY;
+            },
+            handleDragend(e, index) {
+                const moveX = e.pageX - pageX;
+                const moveY = e.pageY - pageY;
+                const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
+                const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
+                const targetChart = this.charts[index];
+                const newChart = {
+                    startCol: targetChart.startCol + moveCol,
+                    startRow: targetChart.startRow + moveRow,
+                    height: targetChart.height,
+                    width: targetChart.width,
+                };
+                if (!this.checkBlocksIsSafe(newChart, targetChart)) {
+                  return;
+                }
+                this.$set(this.charts, index, newChart);
             },
         }
     })
