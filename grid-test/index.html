@@ -46,6 +46,14 @@
     .chart-item {
       position: absolute;
     }
+
+    .chart-template {
+      float: left;
+      margin: 5px;
+      background-color: #2e6da4;
+      text-align: center;
+      font-size: 24px;
+    }
   </style>
 </head>
 <body>
@@ -145,23 +153,51 @@
       </div>
     </div>
   </div>
+  <hr>
+  <div
+      class="chart-template"
+      v-for="(template,index) in chartTemplates"
+      draggable="true"
+      @dragstart="handleTemplateDragstart"
+      @dragend="handleTemplateDragend($event,index)"
+      :style="{
+          width: `${template.width*baseLength}px`,
+          height: `${template.height*baseLength}px`,
+      }"
+  >
+    {{ `${template.width}*${template.height}` }}
+  </div>
 </div>
 </body>
 <script>
   let pageX, pageY;
-  var vm = new Vue({
+  const vm = new Vue({
     el: '#app',
     data: {
-      baseLength: 160,
+      baseLength: 120,
       baseMargin: 10,
       row: 3,
-      col: 4,
+      col: 8,
       minRow: 3,
       minCol: 4,
       maxRow: 20,
       maxCol: 20,
       show: true,
       charts: [],
+      chartTemplates: [
+        {
+          height: 2,
+          width: 2,
+        },
+        {
+          height: 1,
+          width: 1,
+        },
+        {
+          height: 3,
+          width: 4,
+        },
+      ],
       newIndex: 5,
       newHeight: 2,
       newWidth: 2,
@@ -285,7 +321,37 @@
       },
       handleDragover(e) {
         e.dataTransfer.dropEffect = "move";
-      }
+      },
+      handleTemplateDragstart(e) {
+        pageX = e.pageX;
+        pageY = e.pageY;
+        e.dataTransfer.effectAllowed = "move";
+      },
+      handleTemplateDragend(e, index) {
+        const moveX = e.pageX - pageX;
+        const moveY = e.pageY - pageY;
+        const body = document.querySelector('.charts-body');
+        const {left: bodyX, top: bodyY} = body.getBoundingClientRect();
+        const {left: templateX, top: templateY} = e.target.getBoundingClientRect();
+        let templateCol = Math.round((templateX + moveX - bodyX) / (this.baseLength + this.baseMargin)) + 1;
+        let templateRow = Math.round((templateY + moveY - bodyY) / (this.baseLength + this.baseMargin)) + 1;
+        if (templateCol < 1) {
+          templateCol = 1;
+        }
+        if (templateRow < 1) {
+          templateRow = 1;
+        }
+        const targetTemplate = this.chartTemplates[index];
+        const newChart = {
+          startCol: templateCol,
+          startRow: templateRow,
+          height: targetTemplate.height,
+          width: targetTemplate.width,
+        };
+        if (this.checkBlocksIsSafe(newChart)) {
+          this.charts.push(newChart);
+        }
+      },
     }
   })
 </script>
