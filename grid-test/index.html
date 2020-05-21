@@ -21,6 +21,7 @@
       border: 5px solid gray;
       margin: 0 auto;
       padding: 5px;
+      overflow-x: auto;
     }
 
     .grid-body {
@@ -65,11 +66,28 @@
     列：
     <input type="text" v-model.number.lazy="col">
   </label>
+  <hr>
+  <label>
+    最小行：
+    <input type="text" v-model.number.lazy="minRow">
+  </label>
+  <label>
+    最小列：
+    <input type="text" v-model.number.lazy="minCol">
+  </label>
+  <label>
+    最大行：
+    <input type="text" v-model.number.lazy="maxRow">
+  </label>
+  <label>
+    最大列：
+    <input type="text" v-model.number.lazy="maxCol">
+  </label>
+  <hr>
   <label>
     是否显示charts-body
     <input type="checkbox" v-model="show">
   </label>
-  <hr>
   <label>
     新chart插入的index：
     <input type="text" v-model.number.lazy="newIndex">
@@ -138,6 +156,10 @@
       baseMargin: 10,
       row: 3,
       col: 4,
+      minRow: 3,
+      minCol: 4,
+      maxRow: 20,
+      maxCol: 20,
       show: true,
       charts: [],
       newIndex: 5,
@@ -164,9 +186,9 @@
     },
     methods: {
       randomRGBColor() {	//随机生成rgb颜色
-        r = Math.floor(Math.random() * 255);
-        g = Math.floor(Math.random() * 255);
-        b = Math.floor(Math.random() * 255);
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
         return 'rgb(' + r + ',' + g + ',' + b + ')';
       },
       addChart() {
@@ -178,10 +200,9 @@
           height: this.newHeight,
           width: this.newWidth,
         };
-        if (!this.checkBlocksIsSafe(newChart)) {
-          return;
+        if (this.checkBlocksIsSafe(newChart)) {
+          this.charts.push(newChart);
         }
-        this.charts.push(newChart);
       },
       getBlocks(chart) {
         const unsafeBlocks = [];
@@ -195,10 +216,15 @@
       },
       checkBlocksIsSafe(chart, oldChart = {}) {
         const {startRow, startCol, height, width} = chart;
-        if (startRow < 1 || startRow + height - 1 > this.row || startCol < 1 || startCol + width - 1 > this.col) {
+        if (startRow < 1 || startCol < 1) {
           alert('格子超出了画布！');
-          return false;
+          return;
         }
+        if (startRow + height > this.maxRow || startCol + width > this.maxCol) {
+          alert('超出画布最大尺寸');
+          return;
+        }
+        this.getLayoutSize(chart);
         const blocks = this.getBlocks(chart);
         const oldBlocks = this.getBlocks(oldChart);
         if (blocks.every((block) => [...this.safeItems, ...oldBlocks].includes(block))) {
@@ -206,6 +232,34 @@
         }
         alert('格子叠起来了！');
         return false;
+      },
+      getLayoutSize(chart) {
+        const {startRow, startCol, height, width} = chart;
+        if (startRow + height - 1 > this.row) {
+          this.row += 1;
+          this.getLayoutSize(chart);
+        }
+        if (startCol + width - 1 > this.col) {
+          this.col += 1;
+          this.getLayoutSize(chart);
+        }
+      },
+      resetLayoutSize() {
+        const lastRowStartIndex = this.safeItems.indexOf(this.col * (this.row - 1) + 1);
+        const layoutEnd = this.col * this.row;
+        if (lastRowStartIndex > -1 && this.safeItems[lastRowStartIndex + this.col - 1] === layoutEnd && this.row > this.minRow) {
+          this.row -= 1;
+          this.resetLayoutSize();
+        }
+        for (let i = 1; i <= this.row; i += 1) {
+          const lastCol = this.col * i;
+          if (!this.safeItems.includes(lastCol)) {
+            return;
+          } else if (i === this.row && this.col > this.minCol) {
+            this.col -= 1;
+            this.resetLayoutSize();
+          }
+        }
       },
       handleDragstart(e) {
         pageX = e.pageX;
@@ -224,10 +278,10 @@
           height: targetChart.height,
           width: targetChart.width,
         };
-        if (!this.checkBlocksIsSafe(newChart, targetChart)) {
-          return;
+        if (this.checkBlocksIsSafe(newChart, targetChart)) {
+          this.$set(this.charts, index, newChart);
+          this.resetLayoutSize();
         }
-        this.$set(this.charts, index, newChart);
       },
       handleDragover(e) {
         e.dataTransfer.dropEffect = "move";
