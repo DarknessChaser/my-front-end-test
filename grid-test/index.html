@@ -141,7 +141,7 @@
           class="grid-item chart-item"
           draggable="true"
           @dragstart="handleDragstart"
-          @dragend="handleDragend($event,index)"
+          @dragend="handleDragend(index)"
           :style="{
                     backgroundColor:randomRGBColor(),
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
@@ -176,12 +176,12 @@
     data: {
       baseLength: 120,
       baseMargin: 10,
-      row: 3,
+      row: 4,
       col: 8,
-      minRow: 3,
-      minCol: 4,
-      maxRow: 20,
-      maxCol: 20,
+      minRow: 4,
+      minCol: 8,
+      maxRow: 15,
+      maxCol: 15,
       show: true,
       charts: [],
       chartTemplates: [
@@ -216,6 +216,11 @@
         return [...safeSets].sort((a, b) => a - b);
       },
     },
+    watch: {
+      charts() {
+        this.resetLayoutSize();
+      },
+    },
     created() {
     },
     mounted() {
@@ -241,7 +246,8 @@
           width: this.newWidth,
         };
         if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(newChart);
+          this.charts.push(this.getSafeMinRow(newChart));
+          this.resetCharts();
         }
       },
       getBlocks(chart) {
@@ -258,11 +264,11 @@
         const {startRow, startCol, height, width} = chart;
         if (startRow < 1 || startCol < 1) {
           alert('格子超出了画布！');
-          return;
+          return false;
         }
         if (startRow + height > this.maxRow || startCol + width > this.maxCol) {
           alert('超出画布最大尺寸');
-          return;
+          return false;
         }
         this.setLayoutSize(chart);
         const blocks = this.getBlocks(chart);
@@ -270,7 +276,7 @@
         if (blocks.every((block) => [...this.safeItems, ...oldBlocks].includes(block))) {
           return true;
         }
-        alert('格子叠起来了！');
+        // alert('格子叠起来了！');
         return false;
       },
       // 拓展layout尺寸
@@ -303,6 +309,29 @@
           }
         }
       },
+      getSafeMinRow(chart, oldChart = {}) {
+        const newChart = {
+          startCol: chart.startCol,
+          startRow: chart.startRow,
+          height: chart.height,
+          width: chart.width,
+        };
+        for (let i = 0; i < chart.startRow; i += 1) {
+          newChart.startRow -= 1;
+          // 不能超出画布
+          if (newChart.startRow === 0 || !this.checkBlocksIsSafe(newChart, oldChart)) {
+            newChart.startRow += 1;
+            return newChart;
+          }
+        }
+        return chart;
+      },
+      resetCharts() {
+        this.charts.sort((c1, c2) => c1.startRow - c2.startRow || c1.startCol - c2.startCol);
+        for (let i = 0; i < this.charts.length; i++) {
+          this.$set(this.charts, i, this.getSafeMinRow(this.charts[i], this.charts[i]));
+        }
+      },
       handleDragstart(e) {
         DragstartPageX = e.pageX;
         DragstartPageY = e.pageY;
@@ -315,8 +344,7 @@
         DragoverPageX = e.pageX;
         DragoverPageY = e.pageY;
       },
-      handleDragend(e, index) {
-        console.log(e.pageX, DragoverPageX, e.pageY, DragoverPageY);
+      handleDragend(index) {
         const moveX = DragoverPageX - DragstartPageX;
         const moveY = DragoverPageY - DragstartPageY;
         const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
@@ -329,8 +357,8 @@
           width: targetChart.width,
         };
         if (this.checkBlocksIsSafe(newChart, targetChart)) {
-          this.$set(this.charts, index, newChart);
-          this.resetLayoutSize();
+          this.$set(this.charts, index, this.getSafeMinRow(newChart, targetChart));
+          this.resetCharts();
         }
       },
       handleTemplateDragstart(e) {
@@ -339,7 +367,6 @@
         e.dataTransfer.effectAllowed = "move";
       },
       handleTemplateDragend(e, index) {
-        console.log(e.pageX, DragoverPageX, e.pageY, DragoverPageY);
         const moveX = DragoverPageX - DragstartPageX;
         const moveY = DragoverPageY - DragstartPageY;
         const {left: bodyX, top: bodyY} = document.querySelector('.charts-body').getBoundingClientRect();
@@ -360,7 +387,8 @@
           width: targetTemplate.width,
         };
         if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(newChart);
+          this.charts.push(this.getSafeMinRow(newChart));
+          this.resetCharts();
         }
       },
     }
