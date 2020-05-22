@@ -170,7 +170,7 @@
 </div>
 </body>
 <script>
-  let pageX, pageY;
+  let pageX, pageY, DragoverPageX, DragoverPageY;
   const vm = new Vue({
     el: '#app',
     data: {
@@ -216,9 +216,13 @@
         return [...safeSets].sort((a, b) => a - b);
       },
     },
-    created: function () {
+    created() {
     },
-    mounted: function () {
+    mounted() {
+      document.addEventListener("dragover", this.handleFireFoxDragover);
+    },
+    beforeDestroy() {
+      document.removeEventListener("dragover", this.handleFireFoxDragover);
     },
     methods: {
       randomRGBColor() {	//随机生成rgb颜色
@@ -302,9 +306,14 @@
         pageY = e.pageY;
         e.dataTransfer.effectAllowed = "move";
       },
+      handleFireFoxDragover(e) {
+        DragoverPageX = e.pageX;
+        DragoverPageY = e.pageY;
+      },
       handleDragend(e, index) {
-        const moveX = e.pageX - pageX;
-        const moveY = e.pageY - pageY;
+        console.log(e.pageX, DragoverPageX, e.pageY, DragoverPageY);
+        const moveX = DragoverPageX - pageX;
+        const moveY = DragoverPageY - pageY;
         const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
         const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
         const targetChart = this.charts[index];
@@ -328,8 +337,9 @@
         e.dataTransfer.effectAllowed = "move";
       },
       handleTemplateDragend(e, index) {
-        const moveX = e.pageX - pageX;
-        const moveY = e.pageY - pageY;
+        console.log(e.pageX, DragoverPageX, e.pageY, DragoverPageY);
+        const moveX = DragoverPageX - pageX;
+        const moveY = DragoverPageY - pageY;
         const body = document.querySelector('.charts-body');
         const {left: bodyX, top: bodyY} = body.getBoundingClientRect();
         const {left: templateX, top: templateY} = e.target.getBoundingClientRect();
