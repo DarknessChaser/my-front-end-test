@@ -170,7 +170,7 @@
 </div>
 </body>
 <script>
-  let pageX, pageY, DragoverPageX, DragoverPageY;
+  let DragstartPageX, DragstartPageY, DragoverPageX, DragoverPageY;
   const vm = new Vue({
     el: '#app',
     data: {
@@ -264,7 +264,7 @@
           alert('超出画布最大尺寸');
           return;
         }
-        this.getLayoutSize(chart);
+        this.setLayoutSize(chart);
         const blocks = this.getBlocks(chart);
         const oldBlocks = this.getBlocks(oldChart);
         if (blocks.every((block) => [...this.safeItems, ...oldBlocks].includes(block))) {
@@ -273,17 +273,19 @@
         alert('格子叠起来了！');
         return false;
       },
-      getLayoutSize(chart) {
+      // 拓展layout尺寸
+      setLayoutSize(chart) {
         const {startRow, startCol, height, width} = chart;
         if (startRow + height - 1 > this.row) {
           this.row += 1;
-          this.getLayoutSize(chart);
+          this.setLayoutSize(chart);
         }
         if (startCol + width - 1 > this.col) {
           this.col += 1;
-          this.getLayoutSize(chart);
+          this.setLayoutSize(chart);
         }
       },
+      // 缩小layout尺寸
       resetLayoutSize() {
         const lastRowStartIndex = this.safeItems.indexOf(this.col * (this.row - 1) + 1);
         const layoutEnd = this.col * this.row;
@@ -302,9 +304,12 @@
         }
       },
       handleDragstart(e) {
-        pageX = e.pageX;
-        pageY = e.pageY;
+        DragstartPageX = e.pageX;
+        DragstartPageY = e.pageY;
         e.dataTransfer.effectAllowed = "move";
+      },
+      handleDragover(e) {
+        e.dataTransfer.dropEffect = "move";
       },
       handleFireFoxDragover(e) {
         DragoverPageX = e.pageX;
@@ -312,8 +317,8 @@
       },
       handleDragend(e, index) {
         console.log(e.pageX, DragoverPageX, e.pageY, DragoverPageY);
-        const moveX = DragoverPageX - pageX;
-        const moveY = DragoverPageY - pageY;
+        const moveX = DragoverPageX - DragstartPageX;
+        const moveY = DragoverPageY - DragstartPageY;
         const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
         const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
         const targetChart = this.charts[index];
@@ -328,20 +333,16 @@
           this.resetLayoutSize();
         }
       },
-      handleDragover(e) {
-        e.dataTransfer.dropEffect = "move";
-      },
       handleTemplateDragstart(e) {
-        pageX = e.pageX;
-        pageY = e.pageY;
+        DragstartPageX = e.pageX;
+        DragstartPageY = e.pageY;
         e.dataTransfer.effectAllowed = "move";
       },
       handleTemplateDragend(e, index) {
         console.log(e.pageX, DragoverPageX, e.pageY, DragoverPageY);
-        const moveX = DragoverPageX - pageX;
-        const moveY = DragoverPageY - pageY;
-        const body = document.querySelector('.charts-body');
-        const {left: bodyX, top: bodyY} = body.getBoundingClientRect();
+        const moveX = DragoverPageX - DragstartPageX;
+        const moveY = DragoverPageY - DragstartPageY;
+        const {left: bodyX, top: bodyY} = document.querySelector('.charts-body').getBoundingClientRect();
         const {left: templateX, top: templateY} = e.target.getBoundingClientRect();
         let templateCol = Math.round((templateX + moveX - bodyX) / (this.baseLength + this.baseMargin)) + 1;
         let templateRow = Math.round((templateY + moveY - bodyY) / (this.baseLength + this.baseMargin)) + 1;
