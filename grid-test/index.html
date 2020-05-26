@@ -283,11 +283,11 @@
       setLayoutSize(chart) {
         const {startRow, startCol, height, width} = chart;
         if (startRow + height - 1 > this.row) {
-          this.row += 1;
+          this.row = startRow + height - 1;
           this.setLayoutSize(chart);
         }
         if (startCol + width - 1 > this.col) {
-          this.col += 1;
+          this.col = startCol + width - 1;
           this.setLayoutSize(chart);
         }
       },
