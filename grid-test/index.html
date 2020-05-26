@@ -246,7 +246,7 @@
           width: this.newWidth,
         };
         if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(this.getSafeMinRow(newChart));
+          this.charts.push(newChart);
           this.resetCharts();
         }
       },
@@ -357,7 +357,7 @@
           width: targetChart.width,
         };
         if (this.checkBlocksIsSafe(newChart, targetChart)) {
-          this.$set(this.charts, index, this.getSafeMinRow(newChart, targetChart));
+          this.$set(this.charts, index, newChart);
           this.resetCharts();
         }
       },
@@ -387,7 +387,7 @@
           width: targetTemplate.width,
         };
         if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(this.getSafeMinRow(newChart));
+          this.charts.push(newChart);
           this.resetCharts();
         }
       },
