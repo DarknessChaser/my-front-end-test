@@ -299,7 +299,7 @@
           this.row -= 1;
           this.resetLayoutSize();
         }
-        for (let i = 1; i <= this.row; i += 1) {
+        for (let i = 1; i <= this.row; i++) {
           const lastCol = this.col * i;
           if (!this.safeItems.includes(lastCol)) {
             return;
@@ -316,7 +316,7 @@
           height: chart.height,
           width: chart.width,
         };
-        for (let i = 0; i < chart.startRow; i += 1) {
+        for (let i = 0; i < chart.startRow; i++) {
           newChart.startRow -= 1;
           // 不能超出画布
           if (newChart.startRow === 0 || !this.checkBlocksIsSafe(newChart, oldChart)) {
