@@ -204,7 +204,7 @@
     },
     computed: {
       safeItems() {
-        let safeSets = new Set();
+        const safeSets = new Set();
         for (let i = 1; i <= this.row * this.col; i++) {
           safeSets.add(i);
         }
@@ -246,7 +246,7 @@
           width: this.newWidth,
         };
         if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(newChart);
+          this.charts.push(this.getSafeMinRow(newChart));
           this.resetCharts();
         }
       },
@@ -260,7 +260,7 @@
         }
         return unsafeBlocks.sort((a, b) => a - b);
       },
-      checkBlocksIsSafe(chart, oldChart = {}) {
+      checkBlocksIsSafe(chart, oldChart = {}, noMove = false) {
         const {startRow, startCol, height, width} = chart;
         if (startRow < 1 || startCol < 1) {
           alert('格子超出了画布！');
@@ -277,7 +277,43 @@
           return true;
         }
         // alert('格子叠起来了！');
-        return false;
+        if (!noMove) {
+          const unsafeItems = this.getUnsafeItems(oldChart);
+          unsafeItems.forEach((unsafeBlacks, index) => {
+            if (unsafeBlacks.some((unsafeBlack) => blocks.includes(unsafeBlack))) {
+              const targetChart = this.charts[index];
+              const newChart = {
+                startCol: targetChart.startCol,
+                startRow: targetChart.startRow + height,
+                height: targetChart.height,
+                width: targetChart.width,
+              }
+              this.checkBlocksIsSafe(newChart, targetChart);
+              this.$set(this.charts, index, newChart);
+            }
+          });
+          return true;
+        } else {
+          return false;
+        }
+      },
+      getUnsafeItems(targetChart) {
+        const unsafeSets = new Set();
+        this.charts.forEach((chart) => {
+          if (targetChart !== chart) {
+            unsafeSets.add(this.getBlocks(chart));
+          } else {
+            unsafeSets.add([]);
+          }
+        })
+        return [...unsafeSets];
+      },
+      getSafeItems(chart) {
+        const safeSets = new Set(this.safeItems);
+        this.getBlocks(chart).forEach((block) => {
+          safeSets.add(block);
+        });
+        return [...safeSets].sort((a, b) => a - b);
       },
       // 拓展layout尺寸
       setLayoutSize(chart) {
@@ -319,7 +355,7 @@
         for (let i = 0; i < chart.startRow; i++) {
           newChart.startRow -= 1;
           // 不能超出画布
-          if (newChart.startRow === 0 || !this.checkBlocksIsSafe(newChart, oldChart)) {
+          if (newChart.startRow === 0 || !this.checkBlocksIsSafe(newChart, oldChart, true)) {
             newChart.startRow += 1;
             return newChart;
           }
@@ -357,7 +393,7 @@
           width: targetChart.width,
         };
         if (this.checkBlocksIsSafe(newChart, targetChart)) {
-          this.$set(this.charts, index, newChart);
+          this.$set(this.charts, index, this.getSafeMinRow(newChart, targetChart));
           this.resetCharts();
         }
       },
@@ -387,7 +423,7 @@
           width: targetTemplate.width,
         };
         if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(newChart);
+          this.charts.push(this.getSafeMinRow(newChart));
           this.resetCharts();
         }
       },
