@@ -83,14 +83,6 @@
     最小列：
     <input type="text" v-model.number.lazy="minCol">
   </label>
-  <label>
-    最大行：
-    <input type="text" v-model.number.lazy="maxRow">
-  </label>
-  <label>
-    最大列：
-    <input type="text" v-model.number.lazy="maxCol">
-  </label>
   <hr>
   <label>
     是否显示charts-body
@@ -180,8 +172,6 @@
       col: 8,
       minRow: 4,
       minCol: 8,
-      maxRow: 5,
-      maxCol: 15,
       show: true,
       charts: [],
       chartTemplates: [
@@ -264,10 +254,6 @@
         const {startRow, startCol, height, width} = chart;
         if (startRow < 1 || startCol < 1) {
           alert('格子超出了画布！');
-          return false;
-        }
-        if (startRow + height - 1 > this.maxRow || startCol + width - 1 > this.maxCol) {
-          alert('超出画布最大尺寸');
           return false;
         }
         this.setLayoutSize(chart);
