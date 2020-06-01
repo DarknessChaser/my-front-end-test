@@ -180,7 +180,7 @@
       col: 8,
       minRow: 4,
       minCol: 8,
-      maxRow: 15,
+      maxRow: 5,
       maxCol: 15,
       show: true,
       charts: [],
@@ -284,12 +284,16 @@
               const targetChart = this.charts[index];
               const newChart = {
                 startCol: targetChart.startCol,
-                startRow: targetChart.startRow + height,
+                startRow: targetChart.startRow + 1,
                 height: targetChart.height,
                 width: targetChart.width,
               }
-              this.checkBlocksIsSafe(newChart, targetChart);
-              this.$set(this.charts, index, newChart);
+              while (this.getBlocks(newChart).some((block) => blocks.includes(block))) {
+                newChart.startRow += 1;
+              }
+              if (this.checkBlocksIsSafe(newChart, targetChart)) {
+                this.$set(this.charts, index, newChart);
+              }
             }
           });
           return true;
