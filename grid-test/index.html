@@ -279,8 +279,8 @@
         // alert('格子叠起来了！');
         if (!noMove) {
           const unsafeItems = this.getUnsafeItems(oldChart);
-          unsafeItems.forEach((unsafeBlacks, index) => {
-            if (unsafeBlacks.some((unsafeBlack) => blocks.includes(unsafeBlack))) {
+          unsafeItems.forEach((unsafeBlocks, index) => {
+            if (unsafeBlocks.some((unsafeBlock) => blocks.includes(unsafeBlock))) {
               const targetChart = this.charts[index];
               const newChart = {
                 startCol: targetChart.startCol,
