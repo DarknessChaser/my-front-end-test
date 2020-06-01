@@ -266,7 +266,7 @@
           alert('格子超出了画布！');
           return false;
         }
-        if (startRow + height > this.maxRow || startCol + width > this.maxCol) {
+        if (startRow + height - 1 > this.maxRow || startCol + width - 1 > this.maxCol) {
           alert('超出画布最大尺寸');
           return false;
         }
