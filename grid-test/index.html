@@ -299,13 +299,6 @@
         })
         return [...unsafeSets];
       },
-      getSafeItems(chart) {
-        const safeSets = new Set(this.safeItems);
-        this.getBlocks(chart).forEach((block) => {
-          safeSets.add(block);
-        });
-        return [...safeSets].sort((a, b) => a - b);
-      },
       // 拓展layout尺寸
       setLayoutSize(chart) {
         const {startRow, startCol, height, width} = chart;
