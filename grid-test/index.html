@@ -138,21 +138,21 @@
     >
       <div
           v-for="(chart,index) in charts"
-          :key="index"
+          :key="chart.backgroundColor"
           class="grid-item chart-item"
           draggable="true"
           @dragstart="handleDragstart"
           @dragend="handleDragend(index)"
-          @mouseenter="$set(chart,'open',true)"
-          @mouseleave="$set(chart,'open',false)"
+          @mouseenter="chart.open = true"
+          @mouseleave="chart.open = false"
           :style="{
-                    backgroundColor:randomRGBColor(),
+                    backgroundColor: chart.backgroundColor,
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
                     height: `${chart.height*baseLength+(chart.height-1)*baseMargin}px`,
                     transform: `translate(${(chart.startCol-1)*(baseLength+baseMargin)}px, ${(chart.startRow-1)*(baseLength+baseMargin)}px)`,
                }"
       >
-        <span>第{{index}}个图表</span>
+        <span>图表{{chart.backgroundColor}}</span>
         <br>
         <dialog :open="chart.open">
           <form @submit.prevent>
@@ -246,6 +246,8 @@
         return 'rgb(' + r + ',' + g + ',' + b + ')';
       },
       addNewChartToCharts(newChart) {
+        newChart.open = true;
+        newChart.backgroundColor = this.randomRGBColor();
         if (this.checkBlocksIsSafe(newChart)) {
           this.charts.push(this.getSafeMinRow(newChart));
           this.resetCharts();
@@ -271,8 +273,7 @@
       resizeChart(index) {
         const oldChart = this.charts[index];
         const newChart = {
-          startCol: oldChart.startCol,
-          startRow: oldChart.startRow,
+          ...oldChart,
           height: oldChart.newHeight ?? oldChart.height,
           width: oldChart.newWidth ?? oldChart.width,
         };
@@ -289,7 +290,7 @@
         return unsafeBlocks.sort((a, b) => a - b);
       },
       checkBlocksIsSafe(chart, oldChart = {}, noMove = false) {
-        const {startRow, startCol, height, width} = chart;
+        const {startRow, startCol} = chart;
         if (startRow < 1 || startCol < 1) {
           alert('格子超出了画布！');
           return false;
@@ -307,10 +308,8 @@
             if (unsafeBlocks.some((unsafeBlock) => blocks.includes(unsafeBlock))) {
               const targetChart = this.charts[index];
               const newChart = {
-                startCol: targetChart.startCol,
+                ...targetChart,
                 startRow: targetChart.startRow + 1,
-                height: targetChart.height,
-                width: targetChart.width,
               }
               while (this.getBlocks(newChart).some((block) => blocks.includes(block))) {
                 newChart.startRow += 1;
@@ -368,10 +367,7 @@
       },
       getSafeMinRow(chart, oldChart = {}) {
         const newChart = {
-          startCol: chart.startCol,
-          startRow: chart.startRow,
-          height: chart.height,
-          width: chart.width,
+          ...chart,
         };
         for (let i = 0; i < chart.startRow; i++) {
           newChart.startRow -= 1;
@@ -408,10 +404,9 @@
         const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
         const targetChart = this.charts[index];
         const newChart = {
+          ...targetChart,
           startCol: targetChart.startCol + moveCol,
           startRow: targetChart.startRow + moveRow,
-          height: targetChart.height,
-          width: targetChart.width,
         };
         this.replaceChartInCharts(newChart, targetChart, index);
       },
