@@ -245,6 +245,18 @@
         const b = Math.floor(Math.random() * 255);
         return 'rgb(' + r + ',' + g + ',' + b + ')';
       },
+      addNewChartToCharts(newChart) {
+        if (this.checkBlocksIsSafe(newChart)) {
+          this.charts.push(this.getSafeMinRow(newChart));
+          this.resetCharts();
+        }
+      },
+      replaceChartInCharts(newChart, oldChart, index) {
+        if (this.checkBlocksIsSafe(newChart, oldChart)) {
+          this.$set(this.charts, index, this.getSafeMinRow(newChart, oldChart));
+          this.resetCharts();
+        }
+      },
       addChart() {
         const startRow = parseInt((this.newIndex - 1) / this.col) + 1;
         const startCol = (this.newIndex - 1) % this.col + 1;
@@ -254,23 +266,17 @@
           height: this.newHeight,
           width: this.newWidth,
         };
-        if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(this.getSafeMinRow(newChart));
-          this.resetCharts();
-        }
+        this.addNewChartToCharts(newChart);
       },
       resizeChart(index) {
         const oldChart = this.charts[index];
         const newChart = {
           startCol: oldChart.startCol,
           startRow: oldChart.startRow,
-          height: oldChart.newHeight??oldChart.height,
-          width: oldChart.newWidth??oldChart.width,
+          height: oldChart.newHeight ?? oldChart.height,
+          width: oldChart.newWidth ?? oldChart.width,
         };
-        if (this.checkBlocksIsSafe(newChart, oldChart)) {
-          this.$set(this.charts, index, this.getSafeMinRow(newChart, oldChart));
-          this.resetCharts();
-        }
+        this.replaceChartInCharts(newChart, oldChart, index);
       },
       getBlocks(chart) {
         const unsafeBlocks = [];
@@ -407,10 +413,7 @@
           height: targetChart.height,
           width: targetChart.width,
         };
-        if (this.checkBlocksIsSafe(newChart, targetChart)) {
-          this.$set(this.charts, index, this.getSafeMinRow(newChart, targetChart));
-          this.resetCharts();
-        }
+        this.replaceChartInCharts(newChart, targetChart, index);
       },
       handleTemplateDragstart(e) {
         DragstartPageX = e.pageX;
@@ -437,10 +440,7 @@
           height: targetTemplate.height,
           width: targetTemplate.width,
         };
-        if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(this.getSafeMinRow(newChart));
-          this.resetCharts();
-        }
+        this.addNewChartToCharts(newChart);
       },
     }
   })
