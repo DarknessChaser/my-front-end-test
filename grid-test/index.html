@@ -56,6 +56,15 @@
       transition: transform 0.1s ease-in-out;
     }
 
+    .chart-body {
+      border: 2px solid transparent;
+      height: calc(100% - 4px);
+    }
+
+    .chart-body--active {
+      border-color: #2e6da4;
+    }
+
     .chart-template {
       float: left;
       margin: 5px;
@@ -143,8 +152,8 @@
           draggable="true"
           @dragstart="handleDragstart"
           @dragend="handleDragend(index)"
-          @mouseenter="chart.open = true"
-          @mouseleave="chart.open = false"
+          @mouseenter="handleMouseenter(chart)"
+          @mouseleave="handleMouseleave(chart)"
           :style="{
                     backgroundColor: chart.backgroundColor,
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
@@ -152,15 +161,22 @@
                     transform: `translate(${(chart.startCol-1)*(baseLength+baseMargin)}px, ${(chart.startRow-1)*(baseLength+baseMargin)}px)`,
                }"
       >
-        <span>图表{{chart.backgroundColor}}</span>
-        <br>
-        <dialog :open="chart.open">
-          <form @submit.prevent>
-            <input type="text" :value="chart.width" @change="chart.newWidth=Number($event.target.value)">
-            <input type="text" :value="chart.height" @change="chart.newHeight=Number($event.target.value)">
-            <input type="submit" @click="resizeChart(index)" value="重设chart尺寸">
-          </form>
-        </dialog>
+        <div
+            class="chart-body"
+            :class="{
+              'chart-body--active':selectedChartId===chart.backgroundColor,
+            }"
+        >
+          <span>图表{{chart.backgroundColor}}</span>
+          <br>
+          <dialog :open="chart.open">
+            <form @submit.prevent>
+              <input type="text" :value="chart.width" @change="chart.newWidth=Number($event.target.value)">
+              <input type="text" :value="chart.height" @change="chart.newHeight=Number($event.target.value)">
+              <input type="submit" @click="resizeChart(index)" value="重设chart尺寸">
+            </form>
+          </dialog>
+        </div>
       </div>
     </div>
   </div>
@@ -210,6 +226,7 @@
       newIndex: 5,
       newHeight: 2,
       newWidth: 2,
+      selectedChartId: undefined,
     },
     computed: {
       safeItems() {
@@ -258,6 +275,14 @@
           this.$set(this.charts, index, this.getSafeMinRow(newChart, oldChart));
           this.resetCharts();
         }
+      },
+      handleMouseenter(chart) {
+        chart.open = true;
+        this.selectedChartId = chart.backgroundColor;
+      },
+      handleMouseleave(chart) {
+        chart.open = false;
+        this.selectedChartId = undefined;
       },
       addChart() {
         const startRow = parseInt((this.newIndex - 1) / this.col) + 1;
