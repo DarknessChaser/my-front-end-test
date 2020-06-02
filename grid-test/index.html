@@ -135,6 +135,8 @@
           draggable="true"
           @dragstart="handleDragstart"
           @dragend="handleDragend(index)"
+          @mouseenter="$set(chart,'open',true)"
+          @mouseleave="$set(chart,'open',false)"
           :style="{
                     backgroundColor:randomRGBColor(),
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
@@ -142,7 +144,15 @@
                     transform: `translate(${(chart.startCol-1)*(baseLength+baseMargin)}px, ${(chart.startRow-1)*(baseLength+baseMargin)}px)`,
                }"
       >
-        <span>{{index}}</span>
+        <span>第{{index}}个图表</span>
+        <br>
+        <dialog :open="chart.open">
+          <form @submit.prevent>
+            <input type="text" :value="chart.width" @change="chart.newWidth=Number($event.target.value)">
+            <input type="text" :value="chart.height" @change="chart.newHeight=Number($event.target.value)">
+            <input type="submit" @click="resizeChart(index)" value="重设chart尺寸">
+          </form>
+        </dialog>
       </div>
     </div>
   </div>
@@ -238,6 +248,19 @@
         };
         if (this.checkBlocksIsSafe(newChart)) {
           this.charts.push(this.getSafeMinRow(newChart));
+          this.resetCharts();
+        }
+      },
+      resizeChart(index) {
+        const oldChart = this.charts[index];
+        const newChart = {
+          startCol: oldChart.startCol,
+          startRow: oldChart.startRow,
+          height: oldChart.newHeight??oldChart.height,
+          width: oldChart.newWidth??oldChart.width,
+        };
+        if (this.checkBlocksIsSafe(newChart, oldChart)) {
+          this.$set(this.charts, index, this.getSafeMinRow(newChart, oldChart));
           this.resetCharts();
         }
       },
