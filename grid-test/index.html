@@ -261,16 +261,30 @@
         return 'rgb(' + r + ',' + g + ',' + b + ')';
       },
       addNewChartToCharts(newChart) {
-        newChart.open = true;
-        newChart.backgroundColor = this.randomRGBColor();
-        if (this.checkBlocksIsSafe(newChart)) {
-          this.charts.push(this.getSafeMinRow(newChart));
+        const targetChart = {...newChart};
+        targetChart.open = true;
+        targetChart.backgroundColor = this.randomRGBColor();
+        if (targetChart.startCol < 1) {
+          targetChart.startCol = 1;
+        }
+        if (targetChart.startRow < 1) {
+          targetChart.startRow = 1;
+        }
+        if (this.checkBlocksIsSafe(targetChart)) {
+          this.charts.push(this.getSafeMinRow(targetChart));
           this.resetCharts();
         }
       },
       replaceChartInCharts(newChart, oldChart, index) {
-        if (this.checkBlocksIsSafe(newChart, oldChart)) {
-          this.$set(this.charts, index, this.getSafeMinRow(newChart, oldChart));
+        const targetChart = {...newChart};
+        if (targetChart.startCol < 1) {
+          targetChart.startCol = 1;
+        }
+        if (targetChart.startRow < 1) {
+          targetChart.startRow = 1;
+        }
+        if (this.checkBlocksIsSafe(targetChart, oldChart)) {
+          this.$set(this.charts, index, this.getSafeMinRow(targetChart, oldChart));
           this.resetCharts();
         }
       },
@@ -315,7 +329,7 @@
       checkBlocksIsSafe(chart, oldChart = {}, noMove = false) {
         const {startRow, startCol} = chart;
         if (startRow < 1 || startCol < 1) {
-          alert('格子超出了画布！');
+          // alert('格子超出了画布！');
           return false;
         }
         this.setLayoutSize(chart);
@@ -446,12 +460,6 @@
         const {left: templateX, top: templateY} = e.target.getBoundingClientRect();
         let templateCol = Math.round((templateX + moveX - bodyX) / (this.baseLength + this.baseMargin)) + 1;
         let templateRow = Math.round((templateY + moveY - bodyY) / (this.baseLength + this.baseMargin)) + 1;
-        if (templateCol < 1) {
-          templateCol = 1;
-        }
-        if (templateRow < 1) {
-          templateRow = 1;
-        }
         const targetTemplate = this.chartTemplates[index];
         const newChart = {
           startCol: templateCol,
