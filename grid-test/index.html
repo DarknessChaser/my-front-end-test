@@ -243,8 +243,7 @@
         return [...safeSets].sort((a, b) => a - b);
       },
     },
-    watch: {
-    },
+    watch: {},
     created() {
     },
     mounted() {
@@ -327,7 +326,7 @@
         return unsafeBlocks.sort((a, b) => a - b);
       },
       checkBlocksIsSafe(chart, oldChart = {}, noMove = false) {
-        const {startRow, startCol} = chart;
+        const {startRow, startCol, height} = chart;
         if (startRow < 1 || startCol < 1) {
           // alert('格子超出了画布！');
           return false;
@@ -346,7 +345,7 @@
               const targetChart = this.charts[index];
               const newChart = {
                 ...targetChart,
-                startRow: targetChart.startRow + 1,
+                startRow: targetChart.startRow + height,
               }
               while (this.getBlocks(newChart).some((block) => blocks.includes(block))) {
                 newChart.startRow += 1;
