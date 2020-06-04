@@ -244,9 +244,6 @@
       },
     },
     watch: {
-      charts() {
-        this.resetLayoutSize();
-      },
     },
     created() {
     },
@@ -410,6 +407,7 @@
         for (let i = 0; i < this.charts.length; i++) {
           this.$set(this.charts, i, this.getSafeMinRow(this.charts[i], this.charts[i]));
         }
+        this.resetLayoutSize();
       },
       handleDragstart(e) {
         DragstartPageX = e.pageX;
