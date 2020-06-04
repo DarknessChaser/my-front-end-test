@@ -104,8 +104,8 @@
   </label>
   <hr>
   <label>
-    是否显示charts-body
-    <input type="checkbox" v-model="show">
+    是否编辑chart
+    <input type="checkbox" v-model="draggable">
   </label>
   <label>
     新chart插入的index：
@@ -118,6 +118,7 @@
     <input type="text" v-model.number.lazy="newHeight">
     <button @click="addChart">添加新chart</button>
   </label>
+  <hr>
   最新chart参数：{{charts[charts.length-1]}}
   <hr>
   <div
@@ -142,7 +143,6 @@
       <span>b{{index}}</span>
     </div>
     <div
-        v-show="show"
         class="charts-body"
         @dragover.prevent="handleDragover"
     >
@@ -150,11 +150,11 @@
           v-for="(chart,index) in charts"
           :key="chart.backgroundColor"
           class="grid-item chart-item"
-          draggable="true"
-          @dragstart="handleDragstart"
-          @dragend="handleDragend(index)"
-          @mouseenter="handleMouseenter(chart)"
-          @mouseleave="handleMouseleave(chart)"
+          :draggable="draggable"
+          @dragstart="draggable&&handleDragstart($event)"
+          @dragend="draggable&&handleDragend(index)"
+          @mouseenter="draggable&&handleMouseenter(chart)"
+          @mouseleave="draggable&&handleMouseleave(chart)"
           :style="{
                     backgroundColor: chart.backgroundColor,
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
@@ -185,9 +185,9 @@
   <div
       class="chart-template"
       v-for="(template,index) in chartTemplates"
-      draggable="true"
-      @dragstart="handleTemplateDragstart"
-      @dragend="handleTemplateDragend($event,index)"
+      :draggable="draggable"
+      @dragstart="draggable&&handleTemplateDragstart($event)"
+      @dragend="draggable&&handleTemplateDragend($event,index)"
       :style="{
           width: `${template.width*baseLength}px`,
           height: `${template.height*baseLength}px`,
@@ -208,7 +208,7 @@
       col: 8,
       minRow: 4,
       minCol: 8,
-      show: true,
+      draggable: true,
       charts: [],
       chartTemplates: [
         {
