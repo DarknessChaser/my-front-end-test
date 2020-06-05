@@ -73,6 +73,10 @@
       text-align: center;
       font-size: 24px;
     }
+
+    .cursor-move {
+      cursor: move;
+    }
   </style>
 </head>
 <body>
@@ -165,7 +169,7 @@
         <div
             class="chart-body"
             :class="{
-              'chart-body--active':selectedChartId===chart.backgroundColor,
+              'chart-body--active cursor-move':selectedChartId===chart.backgroundColor,
             }"
         >
           <span>图表{{chart.backgroundColor}}</span>
@@ -183,7 +187,7 @@
   </div>
   <hr>
   <div
-      class="chart-template"
+      class="chart-template cursor-move"
       v-for="(template,index) in chartTemplates"
       :draggable="draggable"
       @dragstart="draggable&&handleTemplateDragstart($event)"
