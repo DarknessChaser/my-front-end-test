@@ -138,7 +138,7 @@
         }"
   >
     <div
-        v-for="index in row*col"
+        v-for="(number,index) in row*col"
         :key="index"
         class="grid-item"
         :style="{
@@ -164,7 +164,7 @@
                     backgroundColor: chart.chartId,
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
                     height: `${chart.height*baseLength+(chart.height-1)*baseMargin}px`,
-                    transform: `translate(${(chart.x-1)*(baseLength+baseMargin)}px, ${(chart.y-1)*(baseLength+baseMargin)}px)`,
+                    transform: `translate(${chart.x*(baseLength+baseMargin)}px, ${chart.y*(baseLength+baseMargin)}px)`,
                }"
       >
         <div
@@ -250,8 +250,8 @@
       maxPoint() {
         let maxX = 0, maxY = 0;
         this.charts.forEach((chart) => {
-          const rightPoint = chart.x + chart.width - 1;
-          const bottomPoint = chart.y + chart.height - 1;
+          const rightPoint = chart.x + chart.width;
+          const bottomPoint = chart.y + chart.height;
           if (rightPoint > maxX) {
             maxX = rightPoint;
           }
@@ -284,11 +284,11 @@
           open: true,
           chartId: this.randomRGBColor(),
         };
-        if (targetChart.x < 1) {
-          targetChart.x = 1;
+        if (targetChart.x < 0) {
+          targetChart.x = 0;
         }
-        if (targetChart.y < 1) {
-          targetChart.y = 1;
+        if (targetChart.y < 0) {
+          targetChart.y = 0;
         }
         if (this.checkBlocksIsSafe(targetChart)) {
           this.charts.push(this.getSafeMinRow(targetChart));
@@ -297,11 +297,11 @@
       },
       replaceChartInCharts(newChart, oldChart, index) {
         const targetChart = {...newChart};
-        if (targetChart.x < 1) {
-          targetChart.x = 1;
+        if (targetChart.x < 0) {
+          targetChart.x = 0;
         }
-        if (targetChart.y < 1) {
-          targetChart.y = 1;
+        if (targetChart.y < 0) {
+          targetChart.y = 0;
         }
         if (this.checkBlocksIsSafe(targetChart, oldChart)) {
           this.$set(this.charts, index, this.getSafeMinRow(targetChart, oldChart));
@@ -317,8 +317,8 @@
         this.selectedChartId = undefined;
       },
       addChart() {
-        const y = parseInt((this.newIndex - 1) / this.col) + 1;
-        const x = (this.newIndex - 1) % this.col + 1;
+        const y = parseInt(this.newIndex / this.col);
+        const x = this.newIndex % this.col;
         const newChart = {
           y,
           x,
@@ -341,14 +341,14 @@
         const {y, x, height, width} = chart;
         for (let i = 0; i < height; i++) {
           for (let j = 0; j < width; j++) {
-            unsafeBlocks.push((y - 1) * this.col + x + i * this.col + j);
+            unsafeBlocks.push(y * this.col + x + 1 + i * this.col + j);
           }
         }
         return unsafeBlocks.sort((a, b) => a - b);
       },
       checkBlocksIsSafe(chart, oldChart = {}, noMove = false) {
         const {y, x, height} = chart;
-        if (y < 1 || x < 1) {
+        if (y < 0 || x < 0) {
           // alert('格子超出了画布！');
           return false;
         }
@@ -395,8 +395,8 @@
       // 拓展layout尺寸
       setLayoutSize(chart) {
         const {y, x, height, width} = chart;
-        this.row = Math.max(y + height - 1, this.row);
-        this.col = Math.max(x + width - 1, this.col);
+        this.row = Math.max(y + height, this.row);
+        this.col = Math.max(x + width, this.col);
       },
       // 缩小layout尺寸
       resetLayoutSize() {
@@ -408,10 +408,10 @@
         const newChart = {
           ...chart,
         };
-        for (let i = 0; i < chart.y; i++) {
+        for (let i = 0; i <= chart.y; i++) {
           newChart.y -= 1;
           // 不能超出画布
-          if (newChart.y === 0 || !this.checkBlocksIsSafe(newChart, oldChart, true)) {
+          if (!this.checkBlocksIsSafe(newChart, oldChart, true)) {
             newChart.y += 1;
             return newChart;
           }
@@ -460,8 +460,8 @@
         const moveY = DragoverPageY - DragstartPageY;
         const {left: bodyX, top: bodyY} = document.querySelector('.charts-body').getBoundingClientRect();
         const {left: templateX, top: templateY} = e.target.getBoundingClientRect();
-        let templateCol = Math.round((templateX + moveX - bodyX) / (this.baseLength + this.baseMargin)) + 1;
-        let templateRow = Math.round((templateY + moveY - bodyY) / (this.baseLength + this.baseMargin)) + 1;
+        let templateCol = Math.round((templateX + moveX - bodyX) / (this.baseLength + this.baseMargin));
+        let templateRow = Math.round((templateY + moveY - bodyY) / (this.baseLength + this.baseMargin));
         const targetTemplate = this.chartTemplates[index];
         const newChart = {
           x: templateCol,
