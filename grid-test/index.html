@@ -124,6 +124,7 @@
   </label>
   <hr>
   最新chart参数：{{charts[charts.length-1]}}
+  maxPoint: {{maxPoint}}
   <hr>
   <div
       class="grid-body"
@@ -245,6 +246,20 @@
           });
         })
         return [...safeSets].sort((a, b) => a - b);
+      },
+      maxPoint() {
+        let maxX = 0, maxY = 0;
+        this.charts.forEach((chart) => {
+          const rightPoint = chart.x + chart.width - 1;
+          const bottomPoint = chart.y + chart.height - 1;
+          if (rightPoint > maxX) {
+            maxX = rightPoint;
+          }
+          if (bottomPoint > maxY) {
+            maxY = bottomPoint;
+          }
+        })
+        return {maxX, maxY};
       },
     },
     watch: {},
@@ -380,32 +395,14 @@
       // 拓展layout尺寸
       setLayoutSize(chart) {
         const {y, x, height, width} = chart;
-        if (y + height - 1 > this.row) {
-          this.row = y + height - 1;
-          this.setLayoutSize(chart);
-        }
-        if (x + width - 1 > this.col) {
-          this.col = x + width - 1;
-          this.setLayoutSize(chart);
-        }
+        this.row = Math.max(y + height - 1, this.row);
+        this.col = Math.max(x + width - 1, this.col);
       },
       // 缩小layout尺寸
       resetLayoutSize() {
-        const lastRowStartIndex = this.safeItems.indexOf(this.col * (this.row - 1) + 1);
-        const layoutEnd = this.col * this.row;
-        if (lastRowStartIndex > -1 && this.safeItems[lastRowStartIndex + this.col - 1] === layoutEnd && this.row > this.minRow) {
-          this.row -= 1;
-          this.resetLayoutSize();
-        }
-        for (let i = 1; i <= this.row; i++) {
-          const lastCol = this.col * i;
-          if (!this.safeItems.includes(lastCol)) {
-            return;
-          } else if (i === this.row && this.col > this.minCol) {
-            this.col -= 1;
-            this.resetLayoutSize();
-          }
-        }
+        const {maxX, maxY} = this.maxPoint;
+        this.row = Math.max(maxY, this.minRow);
+        this.col = Math.max(maxX, this.minCol);
       },
       getSafeMinRow(chart, oldChart = {}) {
         const newChart = {
