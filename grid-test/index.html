@@ -152,7 +152,7 @@
     >
       <div
           v-for="(chart,index) in charts"
-          :key="chart.backgroundColor"
+          :key="chart.chartId"
           class="grid-item chart-item"
           :draggable="draggable"
           @dragstart="draggable&&handleDragstart($event)"
@@ -160,19 +160,19 @@
           @mouseenter="draggable&&handleMouseenter(chart)"
           @mouseleave="draggable&&handleMouseleave(chart)"
           :style="{
-                    backgroundColor: chart.backgroundColor,
+                    backgroundColor: chart.chartId,
                     width: `${chart.width*baseLength+(chart.width-1)*baseMargin}px`,
                     height: `${chart.height*baseLength+(chart.height-1)*baseMargin}px`,
-                    transform: `translate(${(chart.startCol-1)*(baseLength+baseMargin)}px, ${(chart.startRow-1)*(baseLength+baseMargin)}px)`,
+                    transform: `translate(${(chart.x-1)*(baseLength+baseMargin)}px, ${(chart.y-1)*(baseLength+baseMargin)}px)`,
                }"
       >
         <div
             class="chart-body"
             :class="{
-              'chart-body--active cursor-move':selectedChartId===chart.backgroundColor,
+              'chart-body--active cursor-move':selectedChartId===chart.chartId,
             }"
         >
-          <span>图表{{chart.backgroundColor}}</span>
+          <span>图表{{chart.chartId}}</span>
           <br>
           <dialog :open="chart.open">
             <form @submit.prevent>
@@ -264,14 +264,16 @@
         return 'rgb(' + r + ',' + g + ',' + b + ')';
       },
       addNewChartToCharts(newChart) {
-        const targetChart = {...newChart};
-        targetChart.open = true;
-        targetChart.backgroundColor = this.randomRGBColor();
-        if (targetChart.startCol < 1) {
-          targetChart.startCol = 1;
+        const targetChart = {
+          ...newChart,
+          open: true,
+          chartId: this.randomRGBColor(),
+        };
+        if (targetChart.x < 1) {
+          targetChart.x = 1;
         }
-        if (targetChart.startRow < 1) {
-          targetChart.startRow = 1;
+        if (targetChart.y < 1) {
+          targetChart.y = 1;
         }
         if (this.checkBlocksIsSafe(targetChart)) {
           this.charts.push(this.getSafeMinRow(targetChart));
@@ -280,11 +282,11 @@
       },
       replaceChartInCharts(newChart, oldChart, index) {
         const targetChart = {...newChart};
-        if (targetChart.startCol < 1) {
-          targetChart.startCol = 1;
+        if (targetChart.x < 1) {
+          targetChart.x = 1;
         }
-        if (targetChart.startRow < 1) {
-          targetChart.startRow = 1;
+        if (targetChart.y < 1) {
+          targetChart.y = 1;
         }
         if (this.checkBlocksIsSafe(targetChart, oldChart)) {
           this.$set(this.charts, index, this.getSafeMinRow(targetChart, oldChart));
@@ -293,18 +295,18 @@
       },
       handleMouseenter(chart) {
         chart.open = true;
-        this.selectedChartId = chart.backgroundColor;
+        this.selectedChartId = chart.chartId;
       },
       handleMouseleave(chart) {
         chart.open = false;
         this.selectedChartId = undefined;
       },
       addChart() {
-        const startRow = parseInt((this.newIndex - 1) / this.col) + 1;
-        const startCol = (this.newIndex - 1) % this.col + 1;
+        const y = parseInt((this.newIndex - 1) / this.col) + 1;
+        const x = (this.newIndex - 1) % this.col + 1;
         const newChart = {
-          startRow,
-          startCol,
+          y,
+          x,
           height: this.newHeight,
           width: this.newWidth,
         };
@@ -321,17 +323,17 @@
       },
       getBlocks(chart) {
         const unsafeBlocks = [];
-        const {startRow, startCol, height, width} = chart;
+        const {y, x, height, width} = chart;
         for (let i = 0; i < height; i++) {
           for (let j = 0; j < width; j++) {
-            unsafeBlocks.push((startRow - 1) * this.col + startCol + i * this.col + j);
+            unsafeBlocks.push((y - 1) * this.col + x + i * this.col + j);
           }
         }
         return unsafeBlocks.sort((a, b) => a - b);
       },
       checkBlocksIsSafe(chart, oldChart = {}, noMove = false) {
-        const {startRow, startCol, height} = chart;
-        if (startRow < 1 || startCol < 1) {
+        const {y, x, height} = chart;
+        if (y < 1 || x < 1) {
           // alert('格子超出了画布！');
           return false;
         }
@@ -349,10 +351,10 @@
               const targetChart = this.charts[index];
               const newChart = {
                 ...targetChart,
-                startRow: targetChart.startRow + height,
+                y: targetChart.y + height,
               }
               while (this.getBlocks(newChart).some((block) => blocks.includes(block))) {
-                newChart.startRow += 1;
+                newChart.y += 1;
               }
               if (this.checkBlocksIsSafe(newChart, targetChart)) {
                 this.$set(this.charts, index, newChart);
@@ -377,13 +379,13 @@
       },
       // 拓展layout尺寸
       setLayoutSize(chart) {
-        const {startRow, startCol, height, width} = chart;
-        if (startRow + height - 1 > this.row) {
-          this.row = startRow + height - 1;
+        const {y, x, height, width} = chart;
+        if (y + height - 1 > this.row) {
+          this.row = y + height - 1;
           this.setLayoutSize(chart);
         }
-        if (startCol + width - 1 > this.col) {
-          this.col = startCol + width - 1;
+        if (x + width - 1 > this.col) {
+          this.col = x + width - 1;
           this.setLayoutSize(chart);
         }
       },
@@ -409,18 +411,18 @@
         const newChart = {
           ...chart,
         };
-        for (let i = 0; i < chart.startRow; i++) {
-          newChart.startRow -= 1;
+        for (let i = 0; i < chart.y; i++) {
+          newChart.y -= 1;
           // 不能超出画布
-          if (newChart.startRow === 0 || !this.checkBlocksIsSafe(newChart, oldChart, true)) {
-            newChart.startRow += 1;
+          if (newChart.y === 0 || !this.checkBlocksIsSafe(newChart, oldChart, true)) {
+            newChart.y += 1;
             return newChart;
           }
         }
         return chart;
       },
       resetCharts() {
-        this.charts.sort((c1, c2) => c1.startRow - c2.startRow || c1.startCol - c2.startCol);
+        this.charts.sort((c1, c2) => c1.y - c2.y || c1.x - c2.x);
         for (let i = 0; i < this.charts.length; i++) {
           this.$set(this.charts, i, this.getSafeMinRow(this.charts[i], this.charts[i]));
         }
@@ -446,8 +448,8 @@
         const targetChart = this.charts[index];
         const newChart = {
           ...targetChart,
-          startCol: targetChart.startCol + moveCol,
-          startRow: targetChart.startRow + moveRow,
+          x: targetChart.x + moveCol,
+          y: targetChart.y + moveRow,
         };
         this.replaceChartInCharts(newChart, targetChart, index);
       },
@@ -465,10 +467,9 @@
         let templateRow = Math.round((templateY + moveY - bodyY) / (this.baseLength + this.baseMargin)) + 1;
         const targetTemplate = this.chartTemplates[index];
         const newChart = {
-          startCol: templateCol,
-          startRow: templateRow,
-          height: targetTemplate.height,
-          width: targetTemplate.width,
+          x: templateCol,
+          y: templateRow,
+          ...targetTemplate,
         };
         this.addNewChartToCharts(newChart);
       },
