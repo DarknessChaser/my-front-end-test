@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>grid布局dome</title>
   <script src="../vue-test/js/vue.js"></script>
+  <script src="./js/lodash.js"></script>
   <style>
     * {
       margin: 0;
@@ -124,7 +125,6 @@
   </label>
   <hr>
   最新chart参数：{{charts[charts.length-1]}}
-  maxPoint: {{maxPoint}}
   <hr>
   <div
       class="grid-body"
@@ -149,15 +149,14 @@
     </div>
     <div
         class="charts-body"
-        @dragover.prevent="handleDragover"
+        @dragover.prevent="handleBodyDragover"
     >
       <div
           v-for="(chart,index) in charts"
           :key="chart.chartId"
           class="grid-item chart-item"
           :draggable="draggable"
-          @dragstart="draggable&&handleDragstart($event)"
-          @dragend="draggable&&handleDragend(index)"
+          @dragstart="draggable&&handleDragstart($event,index)"
           @mouseenter="draggable&&handleMouseenter(chart)"
           @mouseleave="draggable&&handleMouseleave(chart)"
           :style="{
@@ -203,7 +202,7 @@
 </div>
 </body>
 <script>
-  let DragstartPageX, DragstartPageY, DragoverPageX, DragoverPageY;
+  let DragstartPageX, DragstartPageY, DragoverPageX, DragoverPageY, DragChart;
   const vm = new Vue({
     el: '#app',
     data: {
@@ -264,12 +263,13 @@
     },
     watch: {},
     created() {
+      this.throttleHandleDragover = _.throttle(this.handleDragover, 16);
     },
     mounted() {
-      document.addEventListener("dragover", this.handleFireFoxDragover);
+      document.addEventListener("dragover", this.throttleHandleDragover);
     },
     beforeDestroy() {
-      document.removeEventListener("dragover", this.handleFireFoxDragover);
+      document.removeEventListener("dragover", this.throttleHandleDragover);
     },
     methods: {
       randomRGBColor() {	//随机生成rgb颜色
@@ -281,7 +281,6 @@
       addNewChartToCharts(newChart) {
         const targetChart = {
           ...newChart,
-          open: true,
           chartId: this.randomRGBColor(),
         };
         if (targetChart.x < 0) {
@@ -425,29 +424,29 @@
         }
         this.resetLayoutSize();
       },
-      handleDragstart(e) {
+      handleDragstart(e, index) {
         DragstartPageX = e.pageX;
         DragstartPageY = e.pageY;
+        DragChart = {...this.charts[index]};
         e.dataTransfer.effectAllowed = "move";
       },
-      handleDragover(e) {
+      handleBodyDragover(e) {
         e.dataTransfer.dropEffect = "move";
       },
-      handleFireFoxDragover(e) {
+      handleDragover(e) {
         DragoverPageX = e.pageX;
         DragoverPageY = e.pageY;
-      },
-      handleDragend(index) {
         const moveX = DragoverPageX - DragstartPageX;
         const moveY = DragoverPageY - DragstartPageY;
         const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
         const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
-        const targetChart = this.charts[index];
+        const targetChart = DragChart;
         const newChart = {
           ...targetChart,
           x: targetChart.x + moveCol,
           y: targetChart.y + moveRow,
         };
+        const index = this.charts.findIndex((chart) => chart.chartId === DragChart.chartId);
         this.replaceChartInCharts(newChart, targetChart, index);
       },
       handleTemplateDragstart(e) {
