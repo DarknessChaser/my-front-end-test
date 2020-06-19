@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>grid布局dome</title>
   <script src="../vue-test/js/vue.js"></script>
-  <script src="./js/lodash.js"></script>
   <style>
     * {
       margin: 0;
@@ -75,7 +74,7 @@
       font-size: 24px;
     }
 
-    .cursor-move {
+    .cursor-move[draggable="true"] {
       cursor: move;
     }
   </style>
@@ -149,12 +148,16 @@
     </div>
     <div
         class="charts-body"
-        @dragover.prevent="handleBodyDragover"
+        @dragover.prevent="handleDragover"
+        @dragenter="handleTemplateDragenter"
     >
       <div
           v-for="(chart,index) in charts"
           :key="chart.chartId"
           class="grid-item chart-item"
+          :class="{
+              'cursor-move':selectedChartId===chart.chartId,
+            }"
           :draggable="draggable"
           @dragstart="draggable&&handleDragstart($event,index)"
           @mouseenter="draggable&&handleMouseenter(chart)"
@@ -169,7 +172,7 @@
         <div
             class="chart-body"
             :class="{
-              'chart-body--active cursor-move':selectedChartId===chart.chartId,
+              'chart-body--active':selectedChartId===chart.chartId,
             }"
         >
           <span>图表{{chart.chartId}}</span>
@@ -190,8 +193,7 @@
       class="chart-template cursor-move"
       v-for="(template,index) in chartTemplates"
       :draggable="draggable"
-      @dragstart="draggable&&handleTemplateDragstart($event)"
-      @dragend="draggable&&handleTemplateDragend($event,index)"
+      @dragstart="draggable&&handleTemplateDragstart($event,index)"
       :style="{
           width: `${template.width*baseLength}px`,
           height: `${template.height*baseLength}px`,
@@ -202,7 +204,7 @@
 </div>
 </body>
 <script>
-  let DragstartPageX, DragstartPageY, DragoverPageX, DragoverPageY, DragChart;
+  let DragstartPageX, DragstartPageY, DragoverPageX, DragoverPageY, DragChart, templateDragover;
   const vm = new Vue({
     el: '#app',
     data: {
@@ -263,13 +265,10 @@
     },
     watch: {},
     created() {
-      this.throttleHandleDragover = _.throttle(this.handleDragover, 16);
     },
     mounted() {
-      document.addEventListener("dragover", this.throttleHandleDragover);
     },
     beforeDestroy() {
-      document.removeEventListener("dragover", this.throttleHandleDragover);
     },
     methods: {
       randomRGBColor() {	//随机生成rgb颜色
@@ -281,7 +280,6 @@
       addNewChartToCharts(newChart) {
         const targetChart = {
           ...newChart,
-          chartId: this.randomRGBColor(),
         };
         if (targetChart.x < 0) {
           targetChart.x = 0;
@@ -319,6 +317,7 @@
         const y = parseInt(this.newIndex / this.col);
         const x = this.newIndex % this.col;
         const newChart = {
+          chartId: this.randomRGBColor(),
           y,
           x,
           height: this.newHeight,
@@ -430,14 +429,10 @@
         DragChart = {...this.charts[index]};
         e.dataTransfer.effectAllowed = "move";
       },
-      handleBodyDragover(e) {
-        e.dataTransfer.dropEffect = "move";
-      },
       handleDragover(e) {
-        DragoverPageX = e.pageX;
-        DragoverPageY = e.pageY;
-        const moveX = DragoverPageX - DragstartPageX;
-        const moveY = DragoverPageY - DragstartPageY;
+        e.dataTransfer.dropEffect = "move";
+        const moveX = e.pageX - DragstartPageX;
+        const moveY = e.pageY - DragstartPageY;
         const moveCol = Math.round(moveX / (this.baseLength + this.baseMargin));
         const moveRow = Math.round(moveY / (this.baseLength + this.baseMargin));
         const targetChart = DragChart;
@@ -449,25 +444,30 @@
         const index = this.charts.findIndex((chart) => chart.chartId === DragChart.chartId);
         this.replaceChartInCharts(newChart, targetChart, index);
       },
-      handleTemplateDragstart(e) {
+      handleTemplateDragstart(e, index) {
+        templateDragover = true;
         DragstartPageX = e.pageX;
         DragstartPageY = e.pageY;
+        DragChart = {
+          ...this.chartTemplates[index],
+          chartId: this.randomRGBColor(),
+        };
         e.dataTransfer.effectAllowed = "move";
       },
-      handleTemplateDragend(e, index) {
-        const moveX = DragoverPageX - DragstartPageX;
-        const moveY = DragoverPageY - DragstartPageY;
+      handleTemplateDragenter(e) {
+        if(!templateDragover) {
+          return;
+        }
+        templateDragover = false;
         const {left: bodyX, top: bodyY} = document.querySelector('.charts-body').getBoundingClientRect();
-        const {left: templateX, top: templateY} = e.target.getBoundingClientRect();
-        let templateCol = Math.round((templateX + moveX - bodyX) / (this.baseLength + this.baseMargin));
-        let templateRow = Math.round((templateY + moveY - bodyY) / (this.baseLength + this.baseMargin));
-        const targetTemplate = this.chartTemplates[index];
-        const newChart = {
+        let templateCol = Math.round((e.pageX - bodyX) / (this.baseLength + this.baseMargin));
+        let templateRow = Math.round((e.pageY - bodyY) / (this.baseLength + this.baseMargin));
+        DragChart = {
           x: templateCol,
           y: templateRow,
-          ...targetTemplate,
+          ...DragChart,
         };
-        this.addNewChartToCharts(newChart);
+        this.addNewChartToCharts(DragChart);
       },
     }
   })
