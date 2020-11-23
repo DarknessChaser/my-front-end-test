@@ -16,24 +16,27 @@
       height: 100vh;
       justify-content: center;
       align-items: center;
-      flex-flow: column-reverse;
+      flex-flow: column;
       padding: 0 30px;
       pointer-events: none;
+    }
+
+    .container:hover .item:after {
+      opacity: 1;
     }
 
     .row {
       display: flex;
       width: 100%;
-      flex-flow: row-reverse;
+      flex-flow: row;
     }
 
     .row:hover ~ .row .item:after {
-      opacity: 1;
+      opacity: 0.2;
     }
 
     .row.row-reverse {
-      flex-flow: row;
-      justify-content: flex-end;
+      flex-flow: row-reverse;
     }
 
     .row.row-reverse .item:after{
@@ -41,7 +44,7 @@
       left: auto;
     }
 
-    .row.row-reverse .item:last-child:after{
+    .row.row-reverse .item:first-child:after{
       content: '';
       left: 50%;
       right: auto;
@@ -71,12 +74,12 @@
       opacity: 0.2;
     }
 
-    .item:last-child:after {
+    .item:first-child:after {
       content: none;
     }
 
     .item:hover:after,.item:hover~.item:after {
-      opacity: 1;
+      opacity: 0.2;
     }
 
     .item .icon {
@@ -89,16 +92,6 @@
 </head>
 <body>
 <div class="container">
-  <div class="row row-reverse">
-    <div class="item">
-      <div class="icon"></div>
-      <div class="text">此处应当有文字</div>
-    </div>
-    <div class="item">
-      <div class="icon"></div>
-      <div class="text">此处应当有文字</div>
-    </div>
-  </div>
   <div class="row">
     <div class="item">
       <div class="icon"></div>
@@ -108,6 +101,16 @@
       <div class="icon"></div>
       <div class="text">此处应当有文字</div>
     </div>
+    <div class="item">
+      <div class="icon"></div>
+      <div class="text">此处应当有文字</div>
+    </div>
+    <div class="item">
+      <div class="icon"></div>
+      <div class="text">此处应当有文字</div>
+    </div>
+  </div>
+  <div class="row row-reverse">
     <div class="item">
       <div class="icon"></div>
       <div class="text">此处应当有文字</div>
