@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>flex-basis 小实验</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .flex-body {
+            display: flex;
+            width: 100%;
+        }
+
+        .flex-body + .flex-body {
+            margin-top: 30px;
+        }
+
+        .flex-item {
+            height: 200px;
+            border: 1px red solid;
+        }
+    </style>
+</head>
+<body>
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 0;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 0;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 0;"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 0;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 0;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 0;padding: 50px;"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 auto;width: 1200px"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 auto;width: 1200px"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 auto;width: 1200px"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 auto;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 auto;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 auto;padding: 50px;"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 200px;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 200px;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 200px;padding: 50px;"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 100%;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 100%;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 100%;padding: 350px;"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex-grow:1;"></div>-->
+<!--    <div class="flex-item" style="flex-grow:1;"></div>-->
+<!--    <div class="flex-item" style="flex-grow:1;padding: 350px;"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 33.33%;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33.33%;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33.33%;padding: 350px;"></div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        <div style="padding: 100px">1</div>-->
+<!--    </div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        <div style="padding: 200px">2</div>-->
+<!--    </div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        <div style="padding: 300px">3</div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        <div style="padding: 10px">1</div>-->
+<!--    </div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        <div style="padding: 20px">2</div>-->
+<!--    </div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        <div style="padding: 30px">3</div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        1-->
+<!--    </div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        2-->
+<!--    </div>-->
+<!--    <div class="flex-item" style="flex: 1 1 33%;">-->
+<!--        3-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="flex-body">-->
+<!--    <div class="flex-item" style="flex: 1 1 100%;"></div>-->
+<!--    <div class="flex-item" style="flex: 1 1 100%;"></div>-->
+<!--</div>-->
+只有百分比
+<div class="flex-body">
+    <div class="flex-item" style="width: 40%">1</div>
+    <div class="flex-item" style="width: 60%">2</div>
+</div>
+flex-basis覆盖
+<div class="flex-body">
+    <div class="flex-item" style="flex-basis: 60%;width: 40%;">1</div>
+    <div class="flex-item" style="flex-basis: 40%;width: 60%;">2</div>
+</div>
+<hr>
+width压根没有生效，顺路提供一个50%均分的
+<div class="flex-body">
+    <div class="flex-item" style="flex-grow:1;flex-basis: 0;width: 40%;">1</div>
+    <div class="flex-item" style="flex-grow:1;flex-basis: 0;width: 60%;">2</div>
+</div>
+width压根没有生效，顺路提供一个50%均分的
+<div class="flex-body" style="width:1200px;">
+    <div class="flex-item" style="flex-grow:1;flex-basis: 10%;width: 40%;">1  //540</div>
+    <div class="flex-item" style="flex-grow:1;flex-basis: 20%;width: 60%;">2  //660</div>
+</div>
+auto时，先context占位，不均分
+<div class="flex-body">
+    <div class="flex-item" style="flex: auto;width: auto;">1</div>
+    <div class="flex-item" style="flex: auto;width: auto;">2000</div>
+</div>
+手动指定宽度100%，均分
+<div class="flex-body">
+    <div class="flex-item" style="flex: auto;width: 100%;">1</div>
+    <div class="flex-item" style="flex: auto;width: 100%;">2</div>
+</div>
+flex-basis: 100% 覆盖，均分
+<div class="flex-body">
+    <div class="flex-item" style="flex: 1 1 100%;width: auto;">1</div>
+    <div class="flex-item" style="flex: 1 1 100%;width: auto;">200</div>
+</div>
+手动指定宽度100%，但是加入了padding，不均分
+<div class="flex-body">
+    <div class="flex-item" style="flex: auto;width: 100%;padding: 20px;">1</div>
+    <div class="flex-item" style="flex: auto;width: 100%;padding: 200px;">2</div>
+</div>
+手动指定宽度100%，并在子元素加入padding，均分
+<div class="flex-body">
+    <div class="flex-item" style="flex: auto;width: 100%;">
+        <div style="padding: 20px;">1</div>
+    </div>
+    <div class="flex-item" style="flex: auto;width: 100%;">
+        <div style="padding: 200px;">2</div>
+    </div>
+</div>
+<hr>
+padding撑起来的子元素无法被压扁
+<div style="display: flex;">
+    <div class="flex-item" style="flex: auto;padding: 30px;">1</div>
+    <div class="flex-item" style="flex: auto;">2</div>
+    <div class="flex-item" style="flex: auto;padding: 300px;">3</div>
+</div>
+<hr>
+table和flex就硬缝，tr会根据最宽的行来定下宽度，然后再走flex渲染机制
+<div style="width: 1200px;overflow: auto;">
+    <table>
+        <tbody>
+        <tr style="display: flex;">
+            <td style="flex: 1 1 300px;width: 400px">1</td>
+            <td style="flex: 1 1 300px;width: 400px">2</td>
+            <td style="flex: 1 1 300px;width: 400px">3</td>
+            <td style="flex: 1 1 300px;width: 400px">4</td>
+        </tr>
+        <tr style="display: flex;">
+            <td style="flex: 1 1 300px;width: 500px">1</td>
+            <td style="flex: 1 1 300px;width: 500px">2</td>
+            <td style="flex: 1 1 300px;width: 500px">3</td>
+            <td style="flex: 1 1 300px;width: 500px">4</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
