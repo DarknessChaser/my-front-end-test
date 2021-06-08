@@ -16,10 +16,10 @@
 <body>
 <div id="app">
   <label>
-    <input id="creatTimes" type="text" v-model="creatTimes">
+    <input id="create-times" type="text" v-model="createTimes">
   </label>
-  <button type="button" @click="creatColorList()">使用Vue渲染</button>
-  <button type="button" onclick="creatColorDivList()">使用原生渲染</button>
+  <button type="button" @click="createColorList()">使用Vue渲染</button>
+  <button type="button" onclick="createColorDivList()">使用原生渲染</button>
   <hr>
   <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
        :key="color" @click="exchangeColor(color)"></div>
@@ -30,7 +30,7 @@
   var vm = new Vue({
     el: '#app',
     data: {
-      creatTimes: 0,
+      createTimes: 0,
       colorSet: {},
       colorList: []
     },
@@ -48,17 +48,17 @@
           return randomRGBColor;
         }
       },
-      creatColorList: function () {
+      createColorList: function () {
         document.querySelector('#app2').innerHTML = '';
         this.colorSet = {};
         console.time('使用Vue渲染');
-        for (var i = 0; i < this.creatTimes; i += 1) {
+        for (var i = 0; i < this.createTimes; i += 1) {
           this.addRandomRGBColor();
         }
         this.colorList = Object.keys(this.colorSet);
         this.$nextTick(() => {
-            console.timeEnd('使用Vue渲染');
-          }
+              console.timeEnd('使用Vue渲染');
+            }
         )
       },
       exchangeColor: function (color) {
@@ -85,16 +85,16 @@
     }
   }
 
-  function creatColorDivList() {
+  function createColorDivList() {
     colorSet.clear();
     vm.colorSet = {};
     vm.colorList = [];
-    var creatTimes = document.getElementById('creatTimes').value;
+    var createTimes = document.getElementById('create-times').value;
     var app2 = document.getElementById('app2');
     app2.innerHTML = '';
     var fragment = document.createDocumentFragment();
     console.time('使用原生渲染');
-    for (var i = 0; i < creatTimes; i += 1) {
+    for (var i = 0; i < createTimes; i += 1) {
       var div = document.createElement('div');
       div.className = 'color-div';
       div.style.backgroundColor = getRandomRGBColor();
@@ -102,7 +102,7 @@
         exchangeColor(this);
       };
       fragment.appendChild(div);
-      if (i === creatTimes - 1) {
+      if (i === createTimes - 1) {
         console.timeEnd('使用原生渲染');
         app2.appendChild(fragment);
       }
