@@ -15,11 +15,18 @@
 </head>
 <body>
 <div id="app">
-  <label>
-    <input id="create-times" type="text" v-model="createTimes">
-  </label>
-  <button type="button" @click="createColorList()">使用Vue渲染</button>
-  <button type="button" onclick="createColorDivList()">使用原生渲染</button>
+  <p>
+    <input type="number" v-model.number="createTimes" @keyup.enter="createColorList">
+    <button type="button" @click="createColorList">使用Vue渲染</button>
+  </p>
+  <p>
+    <input id="create-times-fragment" type="number" @keyup.enter="createColorDivList">
+    <button type="button" @click="createColorDivList">使用原生渲染</button>
+  </p>
+  <p>
+    <input id="create-times-idle" type="number" @keyup.enter="createColorDivListByIdle">
+    <button type="button" @click="createColorDivListByIdle">使用idle渲染</button>
+  </p>
   <hr>
   <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
        :key="color" @click="exchangeColor(color)"></div>
@@ -65,11 +72,14 @@
         var randomRGBColor = this.addRandomRGBColor();
         this.$delete(this.colorSet, color);
         this.$set(this.colorList, this.colorList.indexOf(color), randomRGBColor);
-      }
+      },
+      createColorDivList:createColorDivList,
+      createColorDivListByIdle:createColorDivListByIdle,
     }
   });
 
   var colorSet = new Set();
+  var app2 = document.getElementById('app2');
 
   function getRandomRGBColor() {	//随机生成rgb颜色
     function getRGBNumber() {
@@ -85,22 +95,29 @@
     }
   }
 
-  function createColorDivList() {
+  function clearDate() {
     colorSet.clear();
     vm.colorSet = {};
     vm.colorList = [];
-    var createTimes = document.getElementById('create-times').value;
-    var app2 = document.getElementById('app2');
+
     app2.innerHTML = '';
+  }
+
+  function getRandomDiv() {
+    var div = document.createElement('div');
+    div.className = 'color-div';
+    div.style.backgroundColor = getRandomRGBColor();
+    div.onclick = exchangeColor;
+    return div;
+  }
+
+  function createColorDivList() {
+    clearDate();
+    var createTimes = document.getElementById('create-times-fragment').value;
     var fragment = document.createDocumentFragment();
     console.time('使用原生渲染');
     for (var i = 0; i < createTimes; i += 1) {
-      var div = document.createElement('div');
-      div.className = 'color-div';
-      div.style.backgroundColor = getRandomRGBColor();
-      div.onclick = function () {
-        exchangeColor(this);
-      };
+      var div = getRandomDiv();
       fragment.appendChild(div);
       if (i === createTimes - 1) {
         console.timeEnd('使用原生渲染');
@@ -109,10 +126,76 @@
     }
   }
 
-  function exchangeColor(targetDom) {
+  function exchangeColor(event) {
+    var targetDom = event.target;
     var randomRGBColor = getRandomRGBColor();
     colorSet.delete(targetDom.style.backgroundColor);
     targetDom.style.backgroundColor = randomRGBColor;
+  }
+
+  let taskList = [];
+  var taskFragment = null;
+  let taskHandle = null;
+  let statusRefreshScheduled = false;
+  var overtimeTime = 1000;
+
+  function addDiv() {
+    if (!taskFragment) {
+      taskFragment = document.createDocumentFragment();
+    }
+    taskFragment.appendChild(getRandomDiv());
+  }
+
+  function enqueueTask(taskHandler) {
+    taskList.push(taskHandler);
+
+    if (!taskHandle) {
+      taskHandle = requestIdleCallback(runTaskQueue, {timeout: overtimeTime});
+    }
+
+    scheduleStatusRefresh();
+  }
+
+  function runTaskQueue(deadline) {
+    while ((deadline.timeRemaining() > 0 || deadline.didTimeout) && taskList.length) {
+      let task = taskList.shift();
+
+      task();
+      scheduleStatusRefresh();
+    }
+
+    if (taskList.length) {
+      taskHandle = requestIdleCallback(runTaskQueue, {timeout: overtimeTime});
+    } else {
+      taskHandle = 0;
+      console.timeEnd('使用idle渲染');
+    }
+  }
+
+  function scheduleStatusRefresh() {
+    if (!statusRefreshScheduled) {
+      requestAnimationFrame(updateDisplay);
+      statusRefreshScheduled = true;
+    }
+  }
+
+  function updateDisplay() {
+    if (taskFragment) {
+      app2.appendChild(taskFragment);
+      taskFragment = null;
+    }
+
+    statusRefreshScheduled = false;
+  }
+
+  function createColorDivListByIdle() {
+    clearDate();
+    var createTimes = document.getElementById('create-times-idle').value;
+    console.time('使用idle渲染');
+
+    for (i = 0; i < createTimes; i++) {
+      enqueueTask(addDiv);
+    }
   }
 </script>
 </body>
