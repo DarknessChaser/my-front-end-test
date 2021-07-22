@@ -27,6 +27,10 @@
     <input id="create-times-idle" type="number" @keyup.enter="createColorDivListByIdle">
     <button type="button" @click="createColorDivListByIdle">使用idle渲染</button>
   </p>
+  <p>
+    <input id="create-times-worker" type="number" @keyup.enter="createColorDivListByWorker">
+    <button type="button" @click="createColorDivListByWorker">使用idle + worker渲染</button>
+  </p>
   <hr>
   <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
        :key="color" @click="exchangeColor(color)"></div>
@@ -73,8 +77,9 @@
         this.$delete(this.colorSet, color);
         this.$set(this.colorList, this.colorList.indexOf(color), randomRGBColor);
       },
-      createColorDivList:createColorDivList,
-      createColorDivListByIdle:createColorDivListByIdle,
+      createColorDivList: createColorDivList,
+      createColorDivListByIdle: createColorDivListByIdle,
+      createColorDivListByWorker: createColorDivListByWorker,
     }
   });
 
@@ -103,10 +108,10 @@
     app2.innerHTML = '';
   }
 
-  function getRandomDiv() {
+  function getRandomDiv(color) {
     var div = document.createElement('div');
     div.className = 'color-div';
-    div.style.backgroundColor = getRandomRGBColor();
+    div.style.backgroundColor = color || getRandomRGBColor();
     div.onclick = exchangeColor;
     return div;
   }
@@ -139,15 +144,15 @@
   let statusRefreshScheduled = false;
   var overtimeTime = 1000;
 
-  function addDiv() {
+  function addDiv(color) {
     if (!taskFragment) {
       taskFragment = document.createDocumentFragment();
     }
-    taskFragment.appendChild(getRandomDiv());
+    taskFragment.appendChild(getRandomDiv(color));
   }
 
-  function enqueueTask(taskHandler) {
-    taskList.push(taskHandler);
+  function enqueueTask(taskHandler,taskData) {
+    taskList.push({taskHandler, taskData});
 
     if (!taskHandle) {
       taskHandle = requestIdleCallback(runTaskQueue, {timeout: overtimeTime});
@@ -158,9 +163,9 @@
 
   function runTaskQueue(deadline) {
     while ((deadline.timeRemaining() > 0 || deadline.didTimeout) && taskList.length) {
-      let task = taskList.shift();
+      const {taskHandler, taskData} = taskList.shift();
 
-      task();
+      taskHandler(taskData);
       scheduleStatusRefresh();
     }
 
@@ -181,6 +186,7 @@
 
   function updateDisplay() {
     if (taskFragment) {
+      // console.log(taskFragment.children);
       app2.appendChild(taskFragment);
       taskFragment = null;
     }
@@ -197,6 +203,23 @@
       enqueueTask(addDiv);
     }
   }
+
+  const myWorker = new Worker("./worker.js");
+
+  function createColorDivListByWorker() {
+    clearDate();
+    var createTimes = document.getElementById('create-times-worker').value;
+    // console.time('使用idle + worker渲染');
+    myWorker.postMessage(['create task', createTimes])
+  }
+
+  myWorker.addEventListener('message', (e) => {
+    const {data: [type, color]} = e;
+    if (type === 'send random color') {
+      // console.log(color);
+      enqueueTask(addDiv, color);
+    }
+  })
 </script>
 </body>
 </html>
