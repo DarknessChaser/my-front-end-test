@@ -25,7 +25,7 @@
   </p>
   <p>
     <input id="create-times-idle" type="number" @keyup.enter="createColorDivListByIdle">
-    <button type="button" @click="createColorDivListByIdle">使用idle渲染</button>
+    <button type="button" @click="createColorDivListByIdle">使用idle异步渲染</button>
   </p>
   <p>
     <input id="create-times-worker" type="number" @keyup.enter="createColorDivListByWorker">
@@ -111,6 +111,9 @@
   function getRandomDiv(color) {
     var div = document.createElement('div');
     div.className = 'color-div';
+    if (color) {
+      colorSet.add(color);
+    }
     div.style.backgroundColor = color || getRandomRGBColor();
     div.onclick = exchangeColor;
     return div;
@@ -138,11 +141,28 @@
     targetDom.style.backgroundColor = randomRGBColor;
   }
 
-  let taskList = [];
+  var taskList = [];
   var taskFragment = null;
-  let taskHandle = null;
-  let statusRefreshScheduled = false;
+  var taskHandle = null;
+  var statusRefreshScheduled = false;
   var overtimeTime = 1000;
+
+  var executionTimes = 0;
+  var expectedTimes = 0;
+  var renderType = '';
+
+  function startTime(type, times) {
+    expectedTimes = Number(times);
+    executionTimes = 0;
+    renderType = type;
+    console.time(type);
+  }
+
+  function endTime() {
+    if (executionTimes === expectedTimes) {
+      console.timeEnd(renderType);
+    }
+  }
 
   function addDiv(color) {
     if (!taskFragment) {
@@ -151,7 +171,7 @@
     taskFragment.appendChild(getRandomDiv(color));
   }
 
-  function enqueueTask(taskHandler,taskData) {
+  function enqueueTask(taskHandler, taskData) {
     taskList.push({taskHandler, taskData});
 
     if (!taskHandle) {
@@ -163,9 +183,11 @@
 
   function runTaskQueue(deadline) {
     while ((deadline.timeRemaining() > 0 || deadline.didTimeout) && taskList.length) {
-      const {taskHandler, taskData} = taskList.shift();
+      var {taskHandler, taskData} = taskList.shift();
 
       taskHandler(taskData);
+      // log 用参数
+      executionTimes++;
       scheduleStatusRefresh();
     }
 
@@ -173,7 +195,7 @@
       taskHandle = requestIdleCallback(runTaskQueue, {timeout: overtimeTime});
     } else {
       taskHandle = 0;
-      console.timeEnd('使用idle渲染');
+      endTime();
     }
   }
 
@@ -186,6 +208,7 @@
 
   function updateDisplay() {
     if (taskFragment) {
+      // 每个 fragment 插入了几个元素，判断是否如预期分片
       // console.log(taskFragment.children);
       app2.appendChild(taskFragment);
       taskFragment = null;
@@ -194,30 +217,48 @@
     statusRefreshScheduled = false;
   }
 
-  function createColorDivListByIdle() {
-    clearDate();
-    var createTimes = document.getElementById('create-times-idle').value;
-    console.time('使用idle渲染');
+  var createdTimes = 0;
+  var createTimes = 0;
 
-    for (i = 0; i < createTimes; i++) {
+  function createTask(deadline) {
+    while ((deadline.timeRemaining() > 0 || deadline.didTimeout) && createdTimes < createTimes) {
+      // 观察实际渲染效果
+      // console.log(deadline.timeRemaining(), deadline.didTimeout, createdTimes);
       enqueueTask(addDiv);
+      createdTimes++;
+    }
+
+    if (createdTimes < createTimes) {
+      requestIdleCallback(createTask);
     }
   }
 
-  const myWorker = new Worker("./worker.js");
+  function createColorDivListByIdle() {
+    clearDate();
+    createTimes = document.getElementById('create-times-idle').value;
+    createdTimes = 0;
+    startTime('使用idle异步渲染', createTimes);
+
+    requestIdleCallback(createTask);
+  }
+
+  var myWorker = new Worker("./worker.js", {type: "module"});
 
   function createColorDivListByWorker() {
     clearDate();
     var createTimes = document.getElementById('create-times-worker').value;
-    // console.time('使用idle + worker渲染');
+    startTime('使用idle + worker渲染', createTimes);
     myWorker.postMessage(['create task', createTimes])
   }
 
   myWorker.addEventListener('message', (e) => {
-    const {data: [type, color]} = e;
+    console.log('get data from worker');
+    var {data: [type, colors]} = e;
     if (type === 'send random color') {
-      // console.log(color);
-      enqueueTask(addDiv, color);
+      // console.log(colors);
+      colors.forEach(color => {
+        enqueueTask(addDiv, color);
+      })
     }
   })
 </script>

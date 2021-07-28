@@ -1,3 +1,5 @@
+import throttle from "./lodash-es/throttle.js";
+
 self.addEventListener('message', (e) => {
     const {data: [type, times]} = e;
     console.log(type, times);
@@ -24,8 +26,17 @@ function getRandomRGBColor() {	//随机生成rgb颜色
     return randomRGBColor;
 }
 
-function createColor(times) {
+async function createColor(times) {
+    // const {default: throttle} = await import('./lodash-es/throttle.js');
+    let colorArray = [];
+    const post = throttle(() => {
+        self.postMessage(['send random color', colorArray]);
+        colorArray = [];
+    }, 16)
     for (let i = 0; i < times; i++) {
-        self.postMessage(['send random color', getRandomRGBColor()]);
+        // colorArray.push(getRandomRGBColor());
+        colorArray.push(getRandomRGBColor());
+        post();
     }
+    console.log('end worker');
 }
