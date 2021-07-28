@@ -3,110 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <title>用css画椭圆</title>
+  <style>
+    .background-img {
+      width: 400px;
+      margin: 0 auto;
+      vertical-align: bottom;
+    }
+
+    .background-img img {
+      max-width: 100%;
+    }
+
+    .background-test {
+      width: 400px;
+      padding-top: 400px;
+      margin: 0 auto;
+      background-color: #2aabd2;
+      background-image: radial-gradient(100px 200px at 200px 200px, rgb(248, 110, 42) 100px, transparent);
+    }
+
+    .background-test2 {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 0 auto;
+      background: rgba(252, 85, 84, 1);
+      box-shadow: 0 11px 29px 0 rgba(220, 16, 14, 0.57);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .background-test2:before {
+      margin-top: 10px;
+      margin-left: -40px;
+      content: '';
+      display: block;
+      width: 200px;
+      height: 100px;
+      background: rgba(246, 123, 19, 0.65);
+      border-radius: 50%;
+      transform: rotate(-.10turn);
+    }
+
+    .background-text {
+      position: absolute;
+      box-sizing: border-box;
+      width: calc(100% - 60px);
+      height: calc(100% - 60px);
+      padding: 10px;
+      top: 0;
+      left: 0;
+      margin: 30px;
+      background-color: #ffffff;
+    }
+
+    .background-test3 {
+      width: 400px;
+      height: 400px;
+      margin: 0 auto;
+      background-image: linear-gradient(#000000 65%, #ff0000 65%);
+      border: solid #2ea1f8 2px;
+    }
+
+    .border {
+      position: relative;
+      border: 4px solid transparent;
+      border-radius: 16px;
+      background: linear-gradient(orange, violet);
+      background-clip: padding-box;
+      padding: 10px;
+      /* just to show box-shadow still works fine */
+      box-shadow: 0 3px 9px black, inset 0 0 9px white;
+    }
+
+    .border::after {
+      position: absolute;
+      top: -4px;
+      bottom: -4px;
+      left: -4px;
+      right: -4px;
+      background: linear-gradient(red, blue);
+      content: '';
+      z-index: -1;
+      border-radius: 16px;
+    }
+
+    .background-test4 {
+      background-color: #2ea1f8;
+      border-radius: 16px;
+      min-height: 225px;
+      line-height: 225px;
+      text-align: center;
+    }
+
+    .is-semicircle {
+      /*使用51%是因为部分设备会出现一道细缝 使用background重置默认的兜底背景色*/
+      background: radial-gradient(circle at right 50%, transparent 20px, #2ea1f8 0) top right / 51% 100% no-repeat,
+      radial-gradient(circle at left 50%, transparent 20px, #2ea1f8 0) bottom left / 51% 100% no-repeat;
+    }
+
+    .is-shadow {
+      filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
+    }
+  </style>
 </head>
-<style>
-  .background-img {
-    width: 400px;
-    margin: 0 auto;
-    vertical-align: bottom;
-  }
-
-  .background-img img {
-    max-width: 100%;
-  }
-
-  .background-test {
-    width: 400px;
-    padding-top: 400px;
-    margin: 0 auto;
-    background-color: #2aabd2;
-    background-image: radial-gradient(100px 200px at 200px 200px, rgb(248, 110, 42) 100px, transparent);
-  }
-
-  .background-test2 {
-    position: relative;
-    width: 400px;
-    height: 400px;
-    margin: 0 auto;
-    background: rgba(252, 85, 84, 1);
-    box-shadow: 0 11px 29px 0 rgba(220, 16, 14, 0.57);
-    border-radius: 18px;
-    overflow: hidden;
-  }
-
-  .background-test2:before {
-    margin-top: 10px;
-    margin-left: -40px;
-    content: '';
-    display: block;
-    width: 200px;
-    height: 100px;
-    background: rgba(246, 123, 19, 0.65);
-    border-radius: 50%;
-    transform: rotate(-.10turn);
-  }
-
-  .background-text {
-    position: absolute;
-    box-sizing: border-box;
-    width: calc(100% - 60px);
-    height: calc(100% - 60px);
-    padding: 10px;
-    top: 0;
-    left: 0;
-    margin: 30px;
-    background-color: #ffffff;
-  }
-
-  .background-test3 {
-    width: 400px;
-    height: 400px;
-    margin: 0 auto;
-    background-image: linear-gradient(#000000 65%, #ff0000 65%);
-    border: solid #2ea1f8 2px;
-  }
-
-  .border {
-    position: relative;
-    border: 4px solid transparent;
-    border-radius: 16px;
-    background: linear-gradient(orange, violet);
-    background-clip: padding-box;
-    padding: 10px;
-    /* just to show box-shadow still works fine */
-    box-shadow: 0 3px 9px black, inset 0 0 9px white;
-  }
-
-  .border::after {
-    position: absolute;
-    top: -4px;
-    bottom: -4px;
-    left: -4px;
-    right: -4px;
-    background: linear-gradient(red, blue);
-    content: '';
-    z-index: -1;
-    border-radius: 16px;
-  }
-
-  .background-test4 {
-    background-color: #2ea1f8;
-    border-radius: 16px;
-    min-height: 225px;
-    line-height: 225px;
-    text-align: center;
-  }
-
-  .is-semicircle {
-    /*使用51%是因为部分设备会出现一道细缝 使用background重置默认的兜底背景色*/
-    background: radial-gradient(circle at right 50%, transparent 20px, #2ea1f8 0) top right / 51% 100% no-repeat,
-    radial-gradient(circle at left 50%, transparent 20px, #2ea1f8 0) bottom left / 51% 100% no-repeat;
-  }
-
-  .is-shadow {
-    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.7));
-  }
-</style>
 <body>
 <p>背景效果图</p>
 <div class="background-img">

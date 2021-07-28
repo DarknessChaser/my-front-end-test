@@ -3,6 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <title>内容高度固定垂直平分</title>
+  <style>
+    html {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .overflowHide {
+      overflow: scroll;
+      /*隐藏滚动条，当IE下溢出，仍然可以滚动*/
+      -ms-overflow-style: none;
+      /*火狐下隐藏滚动条*/
+      overflow: -moz-scrollbars-none;
+    }
+
+    /*chrome下隐藏滚动条*/
+    .overflowHide::-webkit-scrollbar {
+      display: none;
+    }
+
+    .vertica-mode {
+      writing-mode: tb-lr;
+      -webkit-writing-mode: vertical-lr;
+      writing-mode: vertical-lr;
+    }
+
+    .horizontal-mode {
+      writing-mode: lr-tb;
+      -webkit-writing-mode: horizontal-tb;
+      writing-mode: horizontal-tb;
+    }
+
+    .fixed-div {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      background-color: #ffffff;
+    }
+
+    .main {
+      height: 100%;
+      width: 100%;
+      background-color: #0c5460;
+    }
+
+    .layout-table {
+      width: 100%;
+      height: 100%;
+      border-spacing: 0;
+    }
+
+    .layout-table tr {
+      padding: 0;
+    }
+
+    .layout-table td {
+      width: 100%;
+      padding: 0;
+    }
+
+    .layout-td1 {
+      background-color: #2ea1f8;
+    }
+
+    .layout-td2 {
+      background-color: #80bdff;
+    }
+
+    .layout-td3 {
+      background-color: #383d41;
+    }
+
+    .layout-div {
+      width: 100%;
+      height: 80px;
+      margin: auto 0;
+      background-color: #ffffff;
+    }
+
+    .layout-body {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
 <body class="overflowHide">
 <div class="fixed-div">
@@ -31,98 +123,6 @@
     </tbody>
   </table>
 </div>
-<style>
-  html {
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    width: 100%;
-  }
-
-  body {
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    width: 100%;
-  }
-
-  .overflowHide {
-    overflow: scroll;
-    /*隐藏滚动条，当IE下溢出，仍然可以滚动*/
-    -ms-overflow-style: none;
-    /*火狐下隐藏滚动条*/
-    overflow: -moz-scrollbars-none;
-  }
-
-  /*chrome下隐藏滚动条*/
-  .overflowHide::-webkit-scrollbar {
-    display: none;
-  }
-
-  .vertica-mode {
-    writing-mode: tb-lr;
-    -webkit-writing-mode: vertical-lr;
-    writing-mode: vertical-lr;
-  }
-
-  .horizontal-mode {
-    writing-mode: lr-tb;
-    -webkit-writing-mode: horizontal-tb;
-    writing-mode: horizontal-tb;
-  }
-
-  .fixed-div {
-    position: fixed;
-    top: 50%;
-    right: 0;
-    background-color: #ffffff;
-  }
-
-  .main {
-    height: 100%;
-    width: 100%;
-    background-color: #0c5460;
-  }
-
-  .layout-table {
-    width: 100%;
-    height: 100%;
-    border-spacing: 0;
-  }
-
-  .layout-table tr {
-    padding: 0;
-  }
-
-  .layout-table td {
-    width: 100%;
-    padding: 0;
-  }
-
-  .layout-td1 {
-    background-color: #2ea1f8;
-  }
-
-  .layout-td2 {
-    background-color: #80bdff;
-  }
-
-  .layout-td3 {
-    background-color: #383d41;
-  }
-
-  .layout-div {
-    width: 100%;
-    height: 80px;
-    margin: auto 0;
-    background-color: #ffffff;
-  }
-
-  .layout-body {
-    width: 100%;
-    height: 100%;
-  }
-</style>
 <script>
   function addDiv() {
     var divNumber = document.querySelectorAll('.layout-div').length + 1;
