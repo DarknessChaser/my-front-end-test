@@ -26,7 +26,7 @@ function getRandomRGBColor() {	//随机生成rgb颜色
     return randomRGBColor;
 }
 
-function createColor(times) {
+async function createColor(times) {
     // const {default: throttle} = await import('./lodash-es/throttle.js');
     let colorArray = [];
     const post = throttle(() => {
