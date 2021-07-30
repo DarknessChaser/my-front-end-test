@@ -6,6 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>渲染大量随机不重复颜色div测试</title>
   <style>
+    .color-container {
+      display: flex;
+      flex-flow: wrap;
+    }
+
     .color-div {
       float: left;
       width: 50px;
@@ -32,10 +37,12 @@
     <button type="button" @click="createColorDivListByWorker">使用idle + worker渲染</button>
   </p>
   <hr>
-  <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
-       :key="color" @click="exchangeColor(color)"></div>
+  <div class="color-container">
+    <div class="color-div" v-for="color in colorList" :style="{backgroundColor: color}"
+         :key="color" @click="exchangeColor(color)"></div>
+  </div>
 </div>
-<div id="app2"></div>
+<div id="app2" class="color-container"></div>
 <script src="../vue-test/js/vue.js"></script>
 <script>
   var vm = new Vue({
@@ -85,6 +92,7 @@
 
   var colorSet = new Set();
   var app2 = document.getElementById('app2');
+  app2.addEventListener('click', exchangeColor);
 
   function getRandomRGBColor() {	//随机生成rgb颜色
     function getRGBNumber() {
@@ -115,7 +123,6 @@
       colorSet.add(color);
     }
     div.style.backgroundColor = color || getRandomRGBColor();
-    div.onclick = exchangeColor;
     return div;
   }
 
@@ -136,11 +143,15 @@
 
   function exchangeColor(event) {
     var targetDom = event.target;
+    if (!targetDom.classList.contains('color-div')) {
+      return;
+    }
     var randomRGBColor = getRandomRGBColor();
     colorSet.delete(targetDom.style.backgroundColor);
     targetDom.style.backgroundColor = randomRGBColor;
   }
 
+  // idle 用变量
   var taskList = [];
   var taskFragment = null;
   var taskHandle = null;
@@ -217,6 +228,7 @@
     statusRefreshScheduled = false;
   }
 
+  // 异步创建任务用变量
   var createdTimes = 0;
   var createTimes = 0;
 
@@ -255,6 +267,7 @@
     console.log('get data from worker');
     var {data: [type, colors]} = e;
     if (type === 'send random color') {
+      // 这里用idle创建任务的话次数不好控制？
       // console.log(colors);
       colors.forEach(color => {
         enqueueTask(addDiv, color);
