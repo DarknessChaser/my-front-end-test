@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue3生命周期学习</title>
+  <script src="./js/vue3.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h1>{{message}}:{{me2}}</h1>
+    <h2 @click="change4">myobj.b.c{{myobj.b.c}}<br>myobj.b.d{{myobj.b.d}}</h2>
+    <button type="button" @click="change">点我</button>
+    <button type="button" @click="change2">点我2</button>
+    <h3>arr1:{{arr1}}</h3>
+    <input type="checkbox" v-model="arr1" :value="b">
+    <button type="button" @click="pushArr">push</button>
+  </div>
+</body>
+<script>
+
+  var a = {
+    name: 'a',
+    type: 'typeA',
+  };
+  var b = {
+    name: 'a',
+    type: 'typeA',
+  };
+
+  var vm = Vue.createApp({
+    data() {
+      return {
+        message: 'Vue的生命周期',
+        me2: 'me2',
+        myobj: {
+          'a': 123,
+          'b': {
+            'c': 333,
+            'd': 444
+          }
+        },
+        arr1: [],
+        a: a,
+        b: b,
+      }
+    },
+    mounted() {
+      console.log(this);
+    },
+    methods: {
+      test: function () {
+        console.log(this)
+      },
+      test1: () => {
+        console.log(this)
+      },
+      change() {
+        this.message += '1';
+        this.me2 += '1';
+      },
+      change2() {
+        this.message += '1';
+        this.change3();
+      },
+      change3: function () {
+        this.me2 += '1';
+      },
+      change4() {
+        delete this.myobj.b.d;
+      },
+      pushArr() {
+        this.arr1.push(a);
+        console.log('arr1 includes b:', this.arr1.includes(b));
+      }
+    }
+  }).mount('#app');
+</script>
+
+</html>
