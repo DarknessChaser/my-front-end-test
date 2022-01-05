@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    :root {
+      --color: green;
+    }
+  </style>
+</head>
+<body>
+<div id="shadow" style="color: var(--color);">
+  一开始
+</div>
+</body>
+
+<script>
+  const shadowDom = document.getElementById("shadow");
+  const shadowRoot = shadowDom.attachShadow({mode: "open"});
+
+  const divDom = document.createElement("div");
+  divDom.innerHTML = `
+    <div style="color: var(--color);">
+        233
+    </div>
+  `
+
+  const shadowStyle = document.createElement('style');
+  shadowStyle.textContent = `
+    :root,:host {
+        --color: red;
+    }
+    `
+  divDom.append(shadowStyle);
+
+  const shadowScript = document.createElement('script');
+  shadowScript.textContent = `
+    console.log(this);
+    console.log(window);
+    window.a = 233;
+    `
+  divDom.append(shadowScript);
+
+  shadowRoot.appendChild(divDom);
+
+  function addJs() {
+    let link = document.createElement("link");
+    link.setAttribute("rel", "prefetch");
+    link.setAttribute("href", "https://unpkg.com/vue@next");
+    document.head.appendChild(link);
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=> {
+    addJs();
+    console.log(a);
+  })
+</script>
+</html>
