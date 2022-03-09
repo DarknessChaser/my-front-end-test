@@ -254,7 +254,7 @@
     requestIdleCallback(createTask);
   }
 
-  var myWorker = new Worker("./worker.js", {type: "module"});
+  var myWorker = new Worker("./worker.js");
 
   function createColorDivListByWorker() {
     clearDate();
