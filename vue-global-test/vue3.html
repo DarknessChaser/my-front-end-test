@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue3模拟qiankun跨父子应用传递数据学习</title>
+  <script src="./js/vue3.global.js"></script>
+  <script src="./js/vue32.global.js"></script>
+</head>
+
+<body>
+<div id="app">
+  <h3>computedGlobal:{{computedGlobal}}</h3>
+  <button @click="changeC">changeC</button>
+</div>
+
+<div id="app2">
+  <h3>computedGlobal:{{computedGlobal}}</h3>
+  <button @click="changeC">changeC2</button>
+</div>
+</body>
+<script>
+  const globalData = {global: {name: 'global'}};
+  const global1 = Vue.ref(globalData);
+  const global2 = Vue2.ref(JSON.parse(JSON.stringify(globalData)));
+  const computedGlobal1 = Vue.computed({
+    get: () => global1.value.global,
+    set: (value) => {
+      global1.value.global = value;
+      global2.value.global = value;
+    },
+  });
+  const computedGlobal2 = Vue2.computed({
+    get: () => global2.value.global,
+    set: (value) => {
+      global1.value.global = value;
+      global2.value.global = value;
+    },
+  });
+
+  var vm = Vue.createApp({
+    data() {
+      return {}
+    },
+    setup() {
+      const changeC = () => {
+        computedGlobal1.value.name = 'computedGlobal1';
+      }
+      return {
+        computedGlobal: computedGlobal1,
+        changeC,
+      };
+    },
+    mounted() {
+      this.test();
+    },
+    methods: {
+      test: function () {
+        console.log('第一个Vue3中的this', this);
+      },
+    }
+  }).mount('#app');
+
+  var vm2 = Vue2.createApp({
+    data() {
+      return {}
+    },
+    setup() {
+      const changeC = () => {
+        computedGlobal2.value.name = 'computedGlobal2';
+      }
+      return {
+        computedGlobal: computedGlobal2,
+        changeC,
+      };
+    },
+    mounted() {
+      this.test();
+    },
+    methods: {
+      test: function () {
+        console.log('第二个Vue3中的this', this);
+      }
+    },
+  }).mount('#app2');
+</script>
+
+</html>
