@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue2模拟qiankun跨父子应用传递数据学习</title>
+  <script src="./js/vue2.js"></script>
+  <script src="./js/vue22.js"></script>
+</head>
+<body>
+<div id="app">
+  <h3>c:{{c}}</h3>
+  <button @click="c.name='changeC'">changeC</button>
+</div>
+
+<div id="app2">
+  <h3>c:{{c}}</h3>
+  <button @click="c.name='changeC2'">changeC2</button>
+</div>
+</body>
+<script>
+  var c = {name: '123'}
+
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      c,
+    },
+  })
+
+  var vm2 = new Vue2({
+    el: '#app2',
+    data: {
+      c,
+    },
+  })
+</script>
+</html>
