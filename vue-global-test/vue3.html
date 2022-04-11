@@ -23,20 +23,20 @@
 </body>
 <script>
   const globalData = {global: {name: 'global'}};
-  const global1 = Vue.ref(globalData);
-  const global2 = Vue2.ref(JSON.parse(JSON.stringify(globalData)));
+  const global1 = Vue.reactive(globalData);
+  const global2 = Vue2.reactive(JSON.parse(JSON.stringify(globalData)));
   const computedGlobal1 = Vue.computed({
-    get: () => global1.value.global,
+    get: () => global1.global,
     set: (value) => {
-      global1.value.global = value;
-      global2.value.global = value;
+      global1.global = value;
+      global2.global = value;
     },
   });
   const computedGlobal2 = Vue2.computed({
-    get: () => global2.value.global,
+    get: () => global2.global,
     set: (value) => {
-      global1.value.global = value;
-      global2.value.global = value;
+      global1.global = value;
+      global2.global = value;
     },
   });
 
@@ -46,21 +46,13 @@
     },
     setup() {
       const changeC = () => {
-        computedGlobal1.value.name = 'computedGlobal1';
+        computedGlobal1.value = {name: 'computedGlobal1'};
       }
       return {
         computedGlobal: computedGlobal1,
         changeC,
       };
     },
-    mounted() {
-      this.test();
-    },
-    methods: {
-      test: function () {
-        console.log('第一个Vue3中的this', this);
-      },
-    }
   }).mount('#app');
 
   var vm2 = Vue2.createApp({
@@ -69,20 +61,12 @@
     },
     setup() {
       const changeC = () => {
-        computedGlobal2.value.name = 'computedGlobal2';
+        computedGlobal2.value = {name: 'computedGlobal2'};
       }
       return {
         computedGlobal: computedGlobal2,
         changeC,
       };
-    },
-    mounted() {
-      this.test();
-    },
-    methods: {
-      test: function () {
-        console.log('第二个Vue3中的this', this);
-      }
     },
   }).mount('#app2');
 </script>
